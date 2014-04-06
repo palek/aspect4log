@@ -1,0 +1,288 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>net.sf</groupId>
+	<artifactId>apsect4log</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<inceptionYear>2013</inceptionYear>
+	<name>${project.artifactId}</name>
+	<parent><!-- it describes distribution management for snapshot and stage repository -->
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
+
+	<description>Provides an aspect to enable logging based on Log annotation</description>
+	<url>http://aspect4log.sf.net</url>
+	<organization>
+		<name>Semochkin Vitaly Evgenevich</name>
+	</organization>
+
+
+	<licenses>
+		<license>
+			<name>GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1</name>
+			<url>http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt</url>
+		</license>
+	</licenses>
+	<issueManagement>
+		<url>https://sourceforge.net/p/aspect4log/tickets/</url>
+		<system>SourceForge</system>
+	</issueManagement>
+	<scm>
+		<connection>scm:git:git://git.code.sf.net/p/aspect4log/code</connection>
+		<!-- mvn -Dusername=your_scm_username release:prepare is needed in case your OS username is different from SCM username -->
+		<developerConnection>scm:git:ssh://git.code.sf.net/p/aspect4log/code</developerConnection>
+		<url>http://sourceforge.net/p/aspect4log/code/</url>
+	</scm>
+	<developers>
+		<developer>
+			<id>yilativs</id>
+			<name>Vitaliy Semochkin</name>
+			<email>yilativs@users.sourceforge.net</email>
+			<roles>
+				<role>Founder</role>
+				<role>Developer</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>fui</id>
+			<name>Maxim Gordienko</name>
+			<email>fui@users.sourceforge.net</email>
+			<roles>
+				<role>Author of many useful comments and ideas</role>
+				<role>Developer</role>
+			</roles>
+		</developer>
+	</developers>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
+		<spring.version>4.0.1.RELEASE</spring.version>
+		<slf4j.version>1.7.5</slf4j.version>
+		<aspectj.version>1.7.4</aspectj.version>
+		<maven-pmd-plugin.configLocation>${project.basedir}/pmd.xml</maven-pmd-plugin.configLocation>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<configuration>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<plugin><!-- needed for site pluging to accept scp urls -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.3</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.wagon</groupId>
+						<artifactId>wagon-ssh</artifactId>
+						<version>2.6</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<configuration>
+					<releaseProfiles>attach-sources,attach-javadoc,sign-artifacts</releaseProfiles>
+					<username>yilativs</username><!-- make sure that ssh key from current system is uploaded to sf.net -->
+					<!-- <pushChanges>false</pushChanges> needed till release plugin works without bugs -->
+					<!--<tagNameFormat>@{project.version}</tagNameFormat> default is @{project.artifactId}-@{project.version} -->
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-framework-bom</artifactId>
+				<version>${spring.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+				<exclusions>
+					<exclusion>
+						<artifactId>commons-logging</artifactId>
+						<groupId>commons-logging</groupId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	<dependencies>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>${aspectj.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>1.9.1</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>commons-logging</artifactId>
+					<groupId>commons-logging</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<exclusions>
+				<exclusion>
+					<artifactId>commons-logging</artifactId>
+					<groupId>commons-logging</groupId>
+				</exclusion>
+			</exclusions>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.0.13</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<configuration>
+					<dependencyDetailsEnabled>false</dependencyDetailsEnabled>
+					<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+				</configuration>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>index</report>
+							<report>summary</report>
+							<report>issue-tracking</report>
+							<report>project-team</report>
+							<report>dependencies</report>
+							<report>scm</report>
+							<report>modules</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<argLine>-XX:-UseSplitVerifier</argLine>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>findbugs-maven-plugin</artifactId>
+				<version>2.5.3</version>
+				<configuration>
+					<xmlOutput>true</xmlOutput>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<targetJdk>${maven.compiler.source}</targetJdk>
+					<sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
+					<minimumTokens>60</minimumTokens>
+					<rulesets>
+						<ruleset>${maven-pmd-plugin.configLocation}</ruleset>
+					</rulesets>
+					<!-- <linkXref>true</linkXref> -->
+					<failOnViolation>false</failOnViolation>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>taglist-maven-plugin</artifactId>
+				<version>2.4</version>
+			</plugin>
+			<!--coberura plugin makes the tests -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>cobertura-maven-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<formats>
+						<format>html</format>
+						<!-- needed only for CI servers such as jenkins <format>xml</format> -->
+					</formats>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-changes-plugin</artifactId>
+				<!-- <inherited>false</inherited> -->
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>changes-report</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+
+				<configuration>
+					<issueLinkTemplate>http://sourceforge.net/p/aspect4log/tickets/%ISSUE%</issueLinkTemplate>
+					<issueManagementSystems>
+						<issueManagementSystem>changes.xml</issueManagementSystem>
+						<issueManagementSystem>SourceForge</issueManagementSystem>
+					</issueManagementSystems>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
+
+</project>

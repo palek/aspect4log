@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+	<properties>
+		<title>Changes</title>
+		<author email="vitaliy.se@gmail.com">Vitaliy Semochkin</author>
+	</properties>
+	<body>
+		<release version="1.0.0" date="2014-04-01" description="Initial release">
+			<action dev="yilativs" due-to-email="vitaliy.se@gmail.com" type="add">Migration to new Sonatype POM</action>
+		</release>
+	</body>
+</document>
