@@ -20,13 +20,13 @@ import net.sf.aspect4log.Log;
 
 public abstract class BaseCustomisableMessageBulder implements MessageBuilder {
 	private final StringBuilder stringBuilder = new StringBuilder();
-	private final Integer ident;
+	private final Integer indent;
 	private final String methodName;
 	private final Log log;
 	private final Object[] args;
 
-	public BaseCustomisableMessageBulder(Integer ident, String methodName, Log log, Object[] args) {
-		this.ident = ident;
+	public BaseCustomisableMessageBulder(Integer indent, String methodName, Log log, Object[] args) {
+		this.indent = indent;
 		this.methodName = methodName;
 		this.log = log;
 		this.args = args.clone();
@@ -35,7 +35,7 @@ public abstract class BaseCustomisableMessageBulder implements MessageBuilder {
 	@Override
 	public final String build() {
 		buildDirectionSymbol();
-		buildIdent();
+		buildIndent();
 		buildMethodName();
 		buildMethodOpenBracket();
 		buildArguments();
@@ -45,10 +45,10 @@ public abstract class BaseCustomisableMessageBulder implements MessageBuilder {
 		return stringBuilder.toString();
 	}
 
-	protected void buildIdent() {
-		if (log.useIdent()) {
-			for (int i = 0; i < ident.intValue(); i++) {
-				stringBuilder.append(log.identText());
+	protected void buildIndent() {
+		if (log.useIndent()) {
+			for (int i = 0; i < indent.intValue(); i++) {
+				stringBuilder.append(log.indentText());
 			}
 		}
 	}
@@ -89,8 +89,8 @@ public abstract class BaseCustomisableMessageBulder implements MessageBuilder {
 		return stringBuilder;
 	}
 
-	protected Integer getIdent() {
-		return ident;
+	protected Integer getIndent() {
+		return indent;
 	}
 
 	protected String getMethodName() {
@@ -102,7 +102,7 @@ public abstract class BaseCustomisableMessageBulder implements MessageBuilder {
 	}
 
 	protected Object[] getArgs() {
-		return args;
+		return args.clone();
 	}
 
 }

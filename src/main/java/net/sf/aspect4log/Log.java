@@ -74,14 +74,14 @@ public @interface Log {
 
 	/**
 	 * 
-	 * @return specifies if ident should be used for methods called inside marked method. The default value is true.
+	 * @return specifies if indent should be used for methods called inside marked method. The default value is true.
 	 */
-	boolean useIdent() default true;
+	boolean useIndent() default true;
 
 	/**
-	 * @return a java.lang.String that represents text of Ident. The default value is 1 tab symbol.
+	 * @return a java.lang.String that represents text of Indent. The default value is 1 tab symbol.
 	 */
-	String identText() default "	";
+	String indentText() default "\t";
 
 	/**
 	 * default value is $exception

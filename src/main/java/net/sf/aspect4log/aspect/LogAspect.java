@@ -43,7 +43,7 @@ import org.slf4j.MDC;
 public class LogAspect {
 	// TODO consider using Weak references here
 	private final ConcurrentHashMap<Class<?>, Logger> classLoggerMap = new ConcurrentHashMap<>();
-	private final ThreadLocal<Integer> thraedLocalIdent = new ThreadLocal<Integer>();
+	private final ThreadLocal<Integer> thraedLocalIndent = new ThreadLocal<Integer>();
 
 	@Around("execution(!@net.sf.aspect4log.Log *(@net.sf.aspect4log.Log *).*(..)) && @target(log)")
 	public Object logAnnotedClassExecution(ProceedingJoinPoint pjp, Log log) throws Throwable {
@@ -56,25 +56,26 @@ public class LogAspect {
 	}
 
 	private Object log(ProceedingJoinPoint pjp, Log log) throws Throwable {
-		Logger logger = getLogger(pjp);
+		Logger logger = getLogger(pjp.getTarget().getClass());
 		MessageBuilderFactory factory = log.messageBuilderFactory().newInstance();
 		try {
-			increaseIdent(log);
+			increaseIndent(log);
 			setMDC(log, pjp.getArgs());
-			MessageBuilder enterMessageBuilder = factory.createEnterMessageBuilder(thraedLocalIdent.get(), pjp.getSignature().getName(), log, pjp.getArgs());
+			MessageBuilder enterMessageBuilder = factory.createEnterMessageBuilder(thraedLocalIndent.get(), pjp.getSignature().getName(), log, pjp.getArgs());
 			log(logger, log.enterLevel(), enterMessageBuilder);
 			Object result = pjp.proceed();
 			Class<?> returnClass = ((MethodSignature) pjp.getSignature()).getReturnType();
-			boolean returnsNothing = "void".equals(returnClass.getCanonicalName());
-			MessageBuilder successfulReturnMessageBuilder = factory.createSuccessfulReturnMessageBuilder(thraedLocalIdent.get(), pjp.getSignature().getName(), log, pjp.getArgs(), returnsNothing, result);
+//			boolean returnsNothing = "void".equals(returnClass.getCanonicalName());
+			boolean returnsNothing = Void.TYPE.equals(returnClass);
+			MessageBuilder successfulReturnMessageBuilder = factory.createSuccessfulReturnMessageBuilder(thraedLocalIndent.get(), pjp.getSignature().getName(), log, pjp.getArgs(), returnsNothing, result);
 			log(logger, log.successfulReturnLevel(), successfulReturnMessageBuilder);
 			return result;
 		} catch (Throwable e) {
-			MessageBuilder exceptionReturnMessageBuilder = factory.createExceptionReturnMessageBuilder(thraedLocalIdent.get(), pjp.getSignature().getName(), log, pjp.getArgs(), e);
+			MessageBuilder exceptionReturnMessageBuilder = factory.createExceptionReturnMessageBuilder(thraedLocalIndent.get(), pjp.getSignature().getName(), log, pjp.getArgs(), e);
 			log(logger, log.exceptionReturnLevel(), exceptionReturnMessageBuilder);
 			throw e;
 		} finally {
-			decreaseIdent(log);
+			decreaseIndent(log);
 			removeMDC(log);
 		}
 	}
@@ -95,22 +96,22 @@ public class LogAspect {
 		return StringUtils.toString(mdcTemplate, args);
 	}
 
-	private void increaseIdent(Log log) {
-		if (log.useIdent()) {
-			if (thraedLocalIdent.get() == null) {
-				thraedLocalIdent.set(0);
-			} else if (thraedLocalIdent.get() != null) {
-				thraedLocalIdent.set(thraedLocalIdent.get() + 1);
+	private void increaseIndent(Log log) {
+		if (log.useIndent()) {
+			if (thraedLocalIndent.get() == null) {
+				thraedLocalIndent.set(0);
+			} else if (thraedLocalIndent.get() != null) {
+				thraedLocalIndent.set(thraedLocalIndent.get() + 1);
 			}
 		}
 	}
 
-	private void decreaseIdent(Log log) {
-		if (thraedLocalIdent.get() != null) {
-			if (thraedLocalIdent.get() == 0) {
-				thraedLocalIdent.remove();
+	private void decreaseIndent(Log log) {
+		if (thraedLocalIndent.get() != null) {
+			if (thraedLocalIndent.get() == 0) {
+				thraedLocalIndent.remove();
 			} else {
-				thraedLocalIdent.set(thraedLocalIdent.get() - 1);
+				thraedLocalIndent.set(thraedLocalIndent.get() - 1);
 			}
 
 		}
@@ -148,11 +149,12 @@ public class LogAspect {
 		}
 	}
 
-	private Logger getLogger(ProceedingJoinPoint pjp) {
-		Class<?> c = pjp.getTarget().getClass();
+	private Logger getLogger(Class<?> c) {
 		if (!classLoggerMap.contains(c)) {
 			classLoggerMap.putIfAbsent(c, LoggerFactory.getLogger(c));
 		}
+		//we can return classLoggerMap.get(c) because we know, loggers do not disappear from classLoggerMap
 		return classLoggerMap.get(c);
 	}
+	
 }

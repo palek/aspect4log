@@ -20,10 +20,10 @@ import net.sf.aspect4log.Log;
 
 public interface MessageBuilderFactory {
 
-	MessageBuilder createEnterMessageBuilder(Integer ident, String methodName, Log log, Object[] args);
+	MessageBuilder createEnterMessageBuilder(Integer indent, String methodName, Log log, Object[] args);
 
-	MessageBuilder createSuccessfulReturnMessageBuilder(Integer ident, String methodName, Log log, Object[] args, boolean returnsNothing,Object result);
+	MessageBuilder createSuccessfulReturnMessageBuilder(Integer indent, String methodName, Log log, Object[] args, boolean returnsNothing,Object result);
 
-	MessageBuilder createExceptionReturnMessageBuilder(Integer ident, String methodName, Log log, Object[] args, Throwable throwable);
+	MessageBuilder createExceptionReturnMessageBuilder(Integer indent, String methodName, Log log, Object[] args, Throwable throwable);
 
 }

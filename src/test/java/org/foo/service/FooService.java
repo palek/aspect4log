@@ -34,7 +34,7 @@ public class FooService {
 		return fooDao.findFoo();
 	}
 
-	@Log(argumentsTemplate="args were: ${args[0]}")
+	@Log(argumentsTemplate="args were: ${args[0]}",exceptionTemplate="Here goes only ${exception.message}")
 	public void saveFoo(String foo) {
 		if (isFoo(foo)) {
 			fooDao.saveFoo(foo);

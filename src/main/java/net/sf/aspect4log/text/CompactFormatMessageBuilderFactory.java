@@ -19,30 +19,35 @@ package net.sf.aspect4log.text;
 import net.sf.aspect4log.Log;
 
 public class CompactFormatMessageBuilderFactory implements MessageBuilderFactory {
+	private static final char METHOD_ENTER_SYMBOL = '↓';
+	private static final char METHOD_RETURN_SYMBOL = '→';
+	private static final String METHOD_EXCEPTION_RETURN_DELIMITER = " ⇒ ";
+	private static final char METHOD_EXCEPTION_EXIT_SYMBOL = '⇑';
 
 	@Override
-	public MessageBuilder createEnterMessageBuilder(Integer ident, String methodName, Log log, Object[] args) {
-		return new EnterMessageBuilder(ident, methodName, log, args);
+	public MessageBuilder createEnterMessageBuilder(Integer indent, String methodName, Log log, Object[] args) {
+		return new EnterMessageBuilder(indent, methodName, log, args);
 	}
 
 	@Override
-	public MessageBuilder createSuccessfulReturnMessageBuilder(Integer ident, String methodName, Log log, Object[] args, boolean returnsNothing, Object result) {
-		return new SuccessfulReturnMessageBuilder(ident, methodName, log, args, returnsNothing, result);
+	public MessageBuilder createSuccessfulReturnMessageBuilder(Integer indent, String methodName, Log log, Object[] args, boolean returnsNothing, Object result) {
+		return new SuccessfulReturnMessageBuilder(indent, methodName, log, args, returnsNothing, result);
 	}
 
 	@Override
-	public MessageBuilder createExceptionReturnMessageBuilder(Integer ident, String methodName, Log log, Object[] args, Throwable throwable) {
-		return new ExceptionReturnMessageBuilder(ident, methodName, log, args, throwable);
+	public MessageBuilder createExceptionReturnMessageBuilder(Integer indent, String methodName, Log log, Object[] args, Throwable throwable) {
+		return new ExceptionReturnMessageBuilder(indent, methodName, log, args, throwable);
 	}
 
 	private static class EnterMessageBuilder extends BaseCustomisableMessageBulder {
-		public EnterMessageBuilder(Integer ident, String methodName, Log log, Object[] args) {
-			super(ident, methodName, log, args);
+
+		public EnterMessageBuilder(Integer indent, String methodName, Log log, Object[] args) {
+			super(indent, methodName, log, args);
 		}
 
 		@Override
 		protected void buildDirectionSymbol() {
-			getStringBuilder().append('↓');
+			getStringBuilder().append(METHOD_ENTER_SYMBOL);
 		}
 	}
 
@@ -51,8 +56,8 @@ public class CompactFormatMessageBuilderFactory implements MessageBuilderFactory
 		private final Object result;
 		private final boolean returnsNothing;
 
-		public SuccessfulReturnMessageBuilder(Integer ident, String methodName, Log log, Object[] args, boolean returnsNothing, Object result) {
-			super(ident, methodName, log, args);
+		public SuccessfulReturnMessageBuilder(Integer indent, String methodName, Log log, Object[] args, boolean returnsNothing, Object result) {
+			super(indent, methodName, log, args);
 			this.returnsNothing = returnsNothing;
 			this.result = result;
 		}
@@ -65,14 +70,14 @@ public class CompactFormatMessageBuilderFactory implements MessageBuilderFactory
 		@Override
 		protected void buildResultDelimeter() {
 			if (isBuildingResultRequired()) {
-				getStringBuilder().append('→');
+				getStringBuilder().append(METHOD_RETURN_SYMBOL);
 			}
 		}
 
 		@Override
 		protected void buildResult() {
 			if (isBuildingResultRequired()) {
-				getStringBuilder().append(StringUtils.toString(getLog().resultTemplate(),result));
+				getStringBuilder().append(StringUtils.toString(getLog().resultTemplate(), result));
 			}
 		}
 
@@ -85,25 +90,25 @@ public class CompactFormatMessageBuilderFactory implements MessageBuilderFactory
 
 		private final Throwable throwable;
 
-		public ExceptionReturnMessageBuilder(Integer ident, String methodName, Log log, Object[] args, Throwable throwable) {
-			super(ident, methodName, log, args);
+		public ExceptionReturnMessageBuilder(Integer indent, String methodName, Log log, Object[] args, Throwable throwable) {
+			super(indent, methodName, log, args);
 			this.throwable = throwable;
 		}
 
 		@Override
 		protected void buildDirectionSymbol() {
-			getStringBuilder().append('⇑');
+			getStringBuilder().append(METHOD_EXCEPTION_EXIT_SYMBOL);
 		}
 
 		@Override
 		protected void buildResultDelimeter() {
-			getStringBuilder().append(" ⇒ ");
+			getStringBuilder().append(METHOD_EXCEPTION_RETURN_DELIMITER);
 		}
 
 		@Override
 		protected void buildResult() {
 			if (!getLog().exceptionTemplate().isEmpty()) {
-				getStringBuilder().append(StringUtils.toString(getLog().exceptionTemplate(),throwable));
+				getStringBuilder().append(StringUtils.toString(getLog().exceptionTemplate(), throwable));
 			}
 		}
 	}

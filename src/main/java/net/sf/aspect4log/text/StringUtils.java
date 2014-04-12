@@ -49,7 +49,7 @@ public class StringUtils {
 			OBJECT_EQUALS_METHOD_TMP = Object.class.getMethod("toString");
 		} catch (NoSuchMethodException | SecurityException e) {
 			// that's impossible
-			throw new ExceptionInInitializerError("toString mething is not accessible or exist in Object class");
+			throw new ExceptionInInitializerError(e);
 		}
 	}
 	private static final Method OBJECT_EQUALS_METHOD = OBJECT_EQUALS_METHOD_TMP;
