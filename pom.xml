@@ -22,6 +22,7 @@
 		<license>
 			<name>GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1</name>
 			<url>http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt</url>
+			<distribution>repo</distribution>
 		</license>
 	</licenses>
 	<issueManagement>
@@ -67,13 +68,6 @@
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<configuration>
-					<encoding>UTF-8</encoding>
-				</configuration>
-			</plugin>
 			<plugin><!-- needed for site pluging to accept scp urls -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
@@ -89,6 +83,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
+				<version>2.5</version>
 				<configuration>
 					<releaseProfiles>attach-sources,attach-javadoc,sign-artifacts</releaseProfiles>
 					<username>yilativs</username><!-- make sure that ssh key from current system is uploaded to sf.net -->
@@ -189,6 +184,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.7</version>
 				<configuration>
 					<dependencyDetailsEnabled>false</dependencyDetailsEnabled>
 					<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
@@ -206,10 +202,6 @@
 						</reports>
 					</reportSet>
 				</reportSets>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -237,13 +229,14 @@
 					<rulesets>
 						<ruleset>${maven-pmd-plugin.configLocation}</ruleset>
 					</rulesets>
-					<!-- <linkXref>true</linkXref> -->
+					<linkXref>true</linkXref>
 					<failOnViolation>false</failOnViolation>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jxr-plugin</artifactId>
+				<version>2.4</version>
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -265,6 +258,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-changes-plugin</artifactId>
+				<version>2.9</version>
 				<!-- <inherited>false</inherited> -->
 				<reportSets>
 					<reportSet>
