@@ -16,8 +16,6 @@
  */
 package net.sf.aspect4log.aspect;
 
-import java.util.concurrent.ConcurrentHashMap;
-
 import net.sf.aspect4log.Log;
 import net.sf.aspect4log.LogLevel;
 import net.sf.aspect4log.text.MessageBuilder;
@@ -41,8 +39,6 @@ import org.slf4j.MDC;
  */
 @Aspect
 public class LogAspect {
-	// TODO consider using Weak references here
-	private final ConcurrentHashMap<Class<?>, Logger> classLoggerMap = new ConcurrentHashMap<>();
 	private final ThreadLocal<Integer> thraedLocalIndent = new ThreadLocal<Integer>();
 
 	@Around("execution(!@net.sf.aspect4log.Log *(@net.sf.aspect4log.Log *).*(..)) && @target(log)")
@@ -56,7 +52,7 @@ public class LogAspect {
 	}
 
 	private Object log(ProceedingJoinPoint pjp, Log log) throws Throwable {
-		Logger logger = getLogger(pjp.getTarget().getClass());
+		Logger logger = LoggerFactory.getLogger(pjp.getTarget().getClass());
 		MessageBuilderFactory factory = log.messageBuilderFactory().newInstance();
 		try {
 			increaseIndent(log);
@@ -147,14 +143,6 @@ public class LogAspect {
 		case NONE:
 			break;
 		}
-	}
-
-	private Logger getLogger(Class<?> c) {
-		if (!classLoggerMap.contains(c)) {
-			classLoggerMap.putIfAbsent(c, LoggerFactory.getLogger(c));
-		}
-		//we can return classLoggerMap.get(c) because we know, loggers do not disappear from classLoggerMap
-		return classLoggerMap.get(c);
 	}
 	
 }
