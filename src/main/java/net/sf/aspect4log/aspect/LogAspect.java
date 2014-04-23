@@ -18,6 +18,8 @@ package net.sf.aspect4log.aspect;
 
 import net.sf.aspect4log.Log;
 import net.sf.aspect4log.LogLevel;
+import net.sf.aspect4log.conf.Configuration;
+import net.sf.aspect4log.conf.ConfigurationUtils;
 import net.sf.aspect4log.text.MessageBuilder;
 import net.sf.aspect4log.text.MessageBuilderFactory;
 import net.sf.aspect4log.text.StringUtils;
@@ -39,6 +41,9 @@ import org.slf4j.MDC;
  */
 @Aspect
 public class LogAspect {
+
+	private Configuration configuration = ConfigurationUtils.readConfiguration();
+
 	private final ThreadLocal<Integer> thraedLocalIndent = new ThreadLocal<Integer>();
 
 	@Around("execution(!@net.sf.aspect4log.Log *(@net.sf.aspect4log.Log *).*(..)) && @target(log)")
@@ -53,21 +58,21 @@ public class LogAspect {
 
 	private Object log(ProceedingJoinPoint pjp, Log log) throws Throwable {
 		Logger logger = LoggerFactory.getLogger(pjp.getTarget().getClass());
-		MessageBuilderFactory factory = log.messageBuilderFactory().newInstance();
+		MessageBuilderFactory factory = configuration.getMessageBuilderFactory();
 		try {
 			increaseIndent(log);
 			setMDC(log, pjp.getArgs());
-			MessageBuilder enterMessageBuilder = factory.createEnterMessageBuilder(thraedLocalIndent.get(), pjp.getSignature().getName(), log, pjp.getArgs());
+			MessageBuilder enterMessageBuilder = factory.createEnterMessageBuilder(thraedLocalIndent.get(), configuration.getIndentText(), pjp.getSignature().getName(), log, pjp.getArgs());
 			log(logger, log.enterLevel(), enterMessageBuilder);
 			Object result = pjp.proceed();
 			Class<?> returnClass = ((MethodSignature) pjp.getSignature()).getReturnType();
-//			boolean returnsNothing = "void".equals(returnClass.getCanonicalName());
+			// boolean returnsNothing = "void".equals(returnClass.getCanonicalName());
 			boolean returnsNothing = Void.TYPE.equals(returnClass);
-			MessageBuilder successfulReturnMessageBuilder = factory.createSuccessfulReturnMessageBuilder(thraedLocalIndent.get(), pjp.getSignature().getName(), log, pjp.getArgs(), returnsNothing, result);
+			MessageBuilder successfulReturnMessageBuilder = factory.createSuccessfulReturnMessageBuilder(thraedLocalIndent.get(), configuration.getIndentText(), pjp.getSignature().getName(), log, pjp.getArgs(), returnsNothing, result);
 			log(logger, log.successfulReturnLevel(), successfulReturnMessageBuilder);
 			return result;
 		} catch (Throwable e) {
-			MessageBuilder exceptionReturnMessageBuilder = factory.createExceptionReturnMessageBuilder(thraedLocalIndent.get(), pjp.getSignature().getName(), log, pjp.getArgs(), e);
+			MessageBuilder exceptionReturnMessageBuilder = factory.createExceptionReturnMessageBuilder(thraedLocalIndent.get(), configuration.getIndentText(), pjp.getSignature().getName(), log, pjp.getArgs(), e);
 			log(logger, log.exceptionReturnLevel(), exceptionReturnMessageBuilder);
 			throw e;
 		} finally {
@@ -93,7 +98,7 @@ public class LogAspect {
 	}
 
 	private void increaseIndent(Log log) {
-		if (log.useIndent()) {
+		if (configuration.isUseIndent()) {
 			if (thraedLocalIndent.get() == null) {
 				thraedLocalIndent.set(0);
 			} else if (thraedLocalIndent.get() != null) {
@@ -144,5 +149,5 @@ public class LogAspect {
 			break;
 		}
 	}
-	
+
 }

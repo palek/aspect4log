@@ -18,15 +18,17 @@ package net.sf.aspect4log.text;
 
 import net.sf.aspect4log.Log;
 
-public abstract class BaseCustomisableMessageBulder implements MessageBuilder {
+public abstract class CustomisableMessageBulder implements MessageBuilder {
 	private final StringBuilder stringBuilder = new StringBuilder();
 	private final Integer indent;
 	private final String methodName;
 	private final Log log;
 	private final Object[] args;
+	private final String indentText;
 
-	public BaseCustomisableMessageBulder(Integer indent, String methodName, Log log, Object[] args) {
+	public CustomisableMessageBulder(Integer indent, String indentText, String methodName, Log log, Object[] args) {
 		this.indent = indent;
+		this.indentText = indentText;
 		this.methodName = methodName;
 		this.log = log;
 		this.args = args.clone();
@@ -46,10 +48,8 @@ public abstract class BaseCustomisableMessageBulder implements MessageBuilder {
 	}
 
 	protected void buildIndent() {
-		if (log.useIndent()) {
-			for (int i = 0; i < indent.intValue(); i++) {
-				stringBuilder.append(log.indentText());
-			}
+		for (int i = 0; i < indent.intValue(); i++) {
+			stringBuilder.append(indentText);
 		}
 	}
 

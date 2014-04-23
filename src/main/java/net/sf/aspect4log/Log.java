@@ -23,9 +23,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import net.sf.aspect4log.text.CompactFormatMessageBuilderFactory;
-import net.sf.aspect4log.text.MessageBuilderFactory;
-
 /**
  * 
  * Defines the logging rules on method or on the entire class.
@@ -72,16 +69,7 @@ public @interface Log {
 	 */
 	String mdcTemplate() default "";
 
-	/**
-	 * 
-	 * @return specifies if indent should be used for methods called inside marked method. The default value is true.
-	 */
-	boolean useIndent() default true;
-
-	/**
-	 * @return a java.lang.String that represents text of Indent. The default value is 1 tab symbol.
-	 */
-	String indentText() default "\t";
+	
 
 	/**
 	 * default value is $exception
@@ -89,10 +77,7 @@ public @interface Log {
 	 */
 	String exceptionTemplate() default EXCEPTION_DEFAULT_TEMPLATE;
 
-	/*
-	 * String enterPattern() default "$method ($args)"; String exceptionPattern() default "$method ($args)";
-	 */
+	
 
-	Class<? extends MessageBuilderFactory> messageBuilderFactory() default CompactFormatMessageBuilderFactory.class;
 
 }

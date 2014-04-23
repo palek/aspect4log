@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aspect4logConfiguration>
+	<!-- default is true -->
+	<useIndent>true</useIndent>
+	<!--default is \t -->
+	<indentText>	</indentText>
+	
+	<messageBuilderFactoryConfiguration class="net.sf.aspect4log.text.CustomisableMessageBuilderFactory">
+			<methodEnterSymbol>↓</methodEnterSymbol>
+			<methodSuccessfulReturnSymbol>↑</methodSuccessfulReturnSymbol>
+			<methodReturnExceptionSymbol>⇑</methodReturnExceptionSymbol>
+			<returnValueSeporatorSymbol>→</returnValueSeporatorSymbol>
+			<exceptionValueSeporatorSymbol>⇒</exceptionValueSeporatorSymbol>
+			<elementsDelitmeter>, </elementsDelitmeter>
+			<mapKeyValueDelimeter>=</mapKeyValueDelimeter>
+			<arrayBeginsBracket>{</arrayBeginsBracket>
+			<arrayEndsBracket>}</arrayEndsBracket>
+			<iterableBeginsBracket>&lt;</iterableBeginsBracket>
+			<iterableEndsBracket>&gt;</iterableEndsBracket>
+			<undefindedToStringValue>¿</undefindedToStringValue>
+			<nullValue>Ø</nullValue>
+			<errorValue>É</errorValue>
+	</messageBuilderFactoryConfiguration>
+	
+</aspect4logConfiguration>
