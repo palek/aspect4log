@@ -35,6 +35,13 @@
 		<developerConnection>scm:git:ssh://git.code.sf.net/p/aspect4log/code</developerConnection>
 		<url>http://sourceforge.net/p/aspect4log/code/</url>
 	</scm>
+	<distributionManagement>
+		<!-- run before deploying site ssh -t yilativs,aspect4log@shell.sourceforge.net create -->
+		<site>
+			<id>sourceforge.net</id>
+			<url>scp://shell.sourceforge.net/home/project-web/aspect4log/htdocs</url>
+		</site>
+	</distributionManagement>
 	<developers>
 		<developer>
 			<id>yilativs</id>
