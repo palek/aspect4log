@@ -23,5 +23,5 @@ package net.sf.aspect4log;
  * @author Vitaliy S <a href="mailto:vitaliy.se@gmail.com">
  */
 public enum LogLevel {
-	NONE, TRACE, DEBUG, INFO, WARN, ERROR
+	TRACE, DEBUG, INFO, WARN, ERROR
 }

@@ -143,8 +143,6 @@ public class LogAspect {
 				logger.error(messageBuilder.build());
 			}
 			break;
-		case NONE:
-			break;
 		}
 	}
 
