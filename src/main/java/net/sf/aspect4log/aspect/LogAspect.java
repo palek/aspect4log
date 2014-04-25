@@ -83,7 +83,8 @@ public class LogAspect {
 
 	private void setMDC(Log log, Object[] args) {
 		if (!log.mdcKey().isEmpty()) {
-			MDC.put(log.mdcKey(), extractMdcValue(log.mdcTemplate(), args));
+			MessageBuilder mdcMessageBuilder = configuration.getMessageBuilderFactory().createMdcTemplate(log, args);
+			MDC.put(log.mdcKey(), mdcMessageBuilder.build());
 		}
 	}
 
@@ -93,9 +94,6 @@ public class LogAspect {
 		}
 	}
 
-	private String extractMdcValue(String mdcTemplate, Object[] args) {
-		return StringUtils.toString(mdcTemplate, args);
-	}
 
 	private void increaseIndent(Log log) {
 		if (configuration.isUseIndent()) {

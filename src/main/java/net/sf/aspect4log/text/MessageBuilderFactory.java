@@ -25,5 +25,7 @@ public interface MessageBuilderFactory {
 	MessageBuilder createSuccessfulReturnMessageBuilder(Integer indent,String indentText, String methodName, Log log, Object[] args, boolean returnsNothing,Object result);
 
 	MessageBuilder createExceptionReturnMessageBuilder(Integer indent, String indentText,String methodName, Log log, Object[] args, Throwable throwable);
+	
+	MessageBuilder createMdcTemplate(Log log, Object[] args);
 
 }

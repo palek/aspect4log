@@ -30,18 +30,101 @@ import org.apache.commons.lang3.ArrayUtils;
 
 public class StringUtils {
 
-	
 	private static final String ELEMENTS_DELITMETER = ", ";
 	private static final String MAP_KEY_VALUE_DELIMETER = ":";
 	private static final String ARRAY_BEGINS_BRACKET = "{";
 	private static final String ARRAY_ENDS_BRACKET = "}";
-	
+
 	private static final String ITERABLE_BEGINS_BRACKET = "<";
 	private static final String ITERABLE_ENDS_BRACKET = ">";
-	
-	public static final String UNDEFINDED_TO_STRING_VALUE = "¿";
-	public static final String NULL_VALUE = "Ø";
-	public static final String ERROR_VALUE = "É";
+
+	private static final String UNDEFINDED_TO_STRING_VALUE = "¿";
+	private static final String NULL_VALUE = "Ø";
+	private static final String ERROR_VALUE = "É";
+
+	private String elementsDelitmeter = ELEMENTS_DELITMETER;
+	private String mapKeyValueDelimeter = MAP_KEY_VALUE_DELIMETER;
+	private String arrayBeginsBracket = ARRAY_BEGINS_BRACKET;
+	private String arrayEndsBracket = ARRAY_ENDS_BRACKET;
+
+	private String iterableBeginsBracket = ITERABLE_BEGINS_BRACKET;
+	private String iterableEndsBracket = ITERABLE_ENDS_BRACKET;
+
+	private String undefindedToStringValue = UNDEFINDED_TO_STRING_VALUE;
+	private String nullValue = NULL_VALUE;
+	private String errorValue = ERROR_VALUE;
+
+	public String getElementsDelitmeter() {
+		return elementsDelitmeter;
+	}
+
+	public void setElementsDelitmeter(String elementsDelitmeter) {
+		this.elementsDelitmeter = elementsDelitmeter;
+	}
+
+	public String getMapKeyValueDelimeter() {
+		return mapKeyValueDelimeter;
+	}
+
+	public void setMapKeyValueDelimeter(String mapKeyValueDelimeter) {
+		this.mapKeyValueDelimeter = mapKeyValueDelimeter;
+	}
+
+	public String getArrayBeginsBracket() {
+		return arrayBeginsBracket;
+	}
+
+	public void setArrayBeginsBracket(String arrayBeginsBracket) {
+		this.arrayBeginsBracket = arrayBeginsBracket;
+	}
+
+	public String getArrayEndsBracket() {
+		return arrayEndsBracket;
+	}
+
+	public void setArrayEndsBracket(String arrayEndsBracket) {
+		this.arrayEndsBracket = arrayEndsBracket;
+	}
+
+	public String getIterableBeginsBracket() {
+		return iterableBeginsBracket;
+	}
+
+	public void setIterableBeginsBracket(String iterableBeginsBracket) {
+		this.iterableBeginsBracket = iterableBeginsBracket;
+	}
+
+	public String getIterableEndsBracket() {
+		return iterableEndsBracket;
+	}
+
+	public void setIterableEndsBracket(String iterableEndsBracket) {
+		this.iterableEndsBracket = iterableEndsBracket;
+	}
+
+	public String getUndefindedToStringValue() {
+		return undefindedToStringValue;
+	}
+
+	public void setUndefindedToStringValue(String undefindedToStringValue) {
+		this.undefindedToStringValue = undefindedToStringValue;
+	}
+
+	public String getNullValue() {
+		return nullValue;
+	}
+
+	public void setNullValue(String nullValue) {
+		this.nullValue = nullValue;
+	}
+
+	public String getErrorValue() {
+		return errorValue;
+	}
+
+	public void setErrorValue(String errorValue) {
+		this.errorValue = errorValue;
+	}
 
 	private static Method OBJECT_EQUALS_METHOD_TMP = null;
 	static {
@@ -54,50 +137,49 @@ public class StringUtils {
 	}
 	private static final Method OBJECT_EQUALS_METHOD = OBJECT_EQUALS_METHOD_TMP;
 
-
-	public static String toString( Map<?,?> map) {
+	public String toString(Map<?, ?> map) {
 		StringBuilder stringBuilder = new StringBuilder();
-		for (Iterator<?> iterator =  map.entrySet().iterator(); iterator.hasNext(); ) {
+		for (Iterator<?> iterator = map.entrySet().iterator(); iterator.hasNext();) {
 			Entry<?, ?> entry = (Entry<?, ?>) iterator.next();
 			toString(stringBuilder, entry.getKey());
-			stringBuilder.append(MAP_KEY_VALUE_DELIMETER);
+			stringBuilder.append(mapKeyValueDelimeter);
 			toString(stringBuilder, entry.getValue());
 			if (iterator.hasNext()) {
-				stringBuilder.append(ELEMENTS_DELITMETER);
+				stringBuilder.append(elementsDelitmeter);
 			}
 		}
 		return stringBuilder.toString();
 	}
-	
-	public static String toString(Iterable<?> iterable) {
+
+	public String toString(Iterable<?> iterable) {
 		// check if object overrides toString http://stackoverflow.com/questions/12133817/determining-if-a-method-overrides-another-at-runtime
 		// type Ø for null. for not implemented toString ¿
 		StringBuilder stringBuilder = new StringBuilder();
 		;
-		for (Iterator<?> iterator =  iterable.iterator(); iterator.hasNext(); ) {
+		for (Iterator<?> iterator = iterable.iterator(); iterator.hasNext();) {
 			toString(stringBuilder, iterator.next());
 			if (iterator.hasNext()) {
-				stringBuilder.append(ELEMENTS_DELITMETER);
+				stringBuilder.append(elementsDelitmeter);
 			}
 		}
 		return stringBuilder.toString();
 	}
-	
-	public static String toString(Object[] array) {
+
+	public String toString(Object[] array) {
 		// check if object overrides toString http://stackoverflow.com/questions/12133817/determining-if-a-method-overrides-another-at-runtime
 		// type Ø for null. for not implemented toString ¿
 		StringBuilder stringBuilder = new StringBuilder();
 		for (int i = 0; i < array.length; i++) {
 			toString(stringBuilder, array[i]);
 			if (i < array.length - 1) {
-				stringBuilder.append(ELEMENTS_DELITMETER);
+				stringBuilder.append(elementsDelitmeter);
 			}
 		}
 		return stringBuilder.toString();
 	}
-	
-	public static StringBuilder toString(StringBuilder stringBuilder, Object o) {
-		//TODO add Collection, Map to string implementations
+
+	public StringBuilder toString(StringBuilder stringBuilder, Object o) {
+		// TODO add Collection, Map to string implementations
 		if (o != null) {
 			if (o instanceof Object[]) {
 				addArrayBrackets(stringBuilder, toString((Object[]) o));
@@ -117,39 +199,38 @@ public class StringUtils {
 				addArrayBrackets(stringBuilder, toString(ArrayUtils.toObject((float[]) o)));
 			} else if (o instanceof double[]) {
 				addArrayBrackets(stringBuilder, toString(ArrayUtils.toObject((double[]) o)));
-			} else if (o instanceof Map<?,?>) {
-				addIterrableBrackets(stringBuilder, toString((Map<?,?>) o));
+			} else if (o instanceof Map<?, ?>) {
+				addIterrableBrackets(stringBuilder, toString((Map<?, ?>) o));
 			} else if (o instanceof Collection<?>) {
 				addIterrableBrackets(stringBuilder, toString(((Iterable<?>) o)));
-			}else {
+			} else {
 				if (isToStringOverriden(o)) {
 					stringBuilder.append(o);
 				} else {
-					stringBuilder.append(UNDEFINDED_TO_STRING_VALUE);
+					stringBuilder.append(undefindedToStringValue);
 				}
 			}
 		} else {
-			stringBuilder.append(NULL_VALUE);
+			stringBuilder.append(nullValue);
 		}
 		return stringBuilder;
 	}
 
-	private static void addBrackets(StringBuilder stringBuilder, String beginBracket, String string, String endBracket ) {
+	private void addBrackets(StringBuilder stringBuilder, String beginBracket, String string, String endBracket) {
 		stringBuilder.append(beginBracket);
 		stringBuilder.append(string);
 		stringBuilder.append(endBracket);
 	}
-	
-	private static void addArrayBrackets(StringBuilder stringBuilder, String string) {
-		addBrackets(stringBuilder, ARRAY_BEGINS_BRACKET ,string, ARRAY_ENDS_BRACKET);
-	}
-	
-	private static void addIterrableBrackets(StringBuilder stringBuilder, String string) {
-		addBrackets(stringBuilder, ITERABLE_BEGINS_BRACKET ,string, ITERABLE_ENDS_BRACKET);
-	}
-	
 
-	public static boolean isToStringOverriden(Object obj) {
+	private void addArrayBrackets(StringBuilder stringBuilder, String string) {
+		addBrackets(stringBuilder, arrayBeginsBracket, string, arrayEndsBracket);
+	}
+
+	private void addIterrableBrackets(StringBuilder stringBuilder, String string) {
+		addBrackets(stringBuilder, iterableBeginsBracket, string, iterableEndsBracket);
+	}
+
+	public boolean isToStringOverriden(Object obj) {
 		if (obj != null) {
 			try {
 				// TODO consider to cache toString methods for each class, cache should be based on Weak References
@@ -165,8 +246,8 @@ public class StringUtils {
 	// \$\{(.*)\};
 	private static final Pattern VARIABLE_SEARCH_PATTERN = Pattern.compile("(?!\\$\\{\\$\\{)\\$\\{(.*?)\\}");
 
-	public static String toString(String template, Object object) {
-		if(template.isEmpty()){
+	public String toString(String template, Object object) {
+		if (template.isEmpty()) {
 			return "";
 		}
 		Matcher matcher = VARIABLE_SEARCH_PATTERN.matcher(template);
@@ -184,12 +265,12 @@ public class StringUtils {
 		return stringBuilder.toString();
 	}
 
-	private static String toString(Object bean, String property) {
+	private String toString(Object bean, String property) {
 		StringBuilder stringBuilder = new StringBuilder();
 		try {
 			toString(stringBuilder, PropertyUtils.getProperty(bean, property));
 		} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-			stringBuilder.append(ERROR_VALUE);
+			stringBuilder.append(errorValue);
 		}
 		return stringBuilder.toString();
 
