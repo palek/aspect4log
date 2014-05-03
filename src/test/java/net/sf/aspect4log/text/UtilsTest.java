@@ -7,11 +7,10 @@ public class UtilsTest {
 
 	@Test
 	public void isToStringOverriden() {
-		Assert.assertFalse(new StringUtils().isToStringOverriden(new Object()));
-		Assert.assertFalse(new StringUtils().isToStringOverriden(new Object[] { 1 }));
-		Assert.assertTrue(new StringUtils().isToStringOverriden(new String("s")));
-		Assert.assertFalse(new StringUtils().isToStringOverriden(null));
-		Assert.assertTrue(new StringUtils().isToStringOverriden(new Integer(1)));
+		Assert.assertFalse(new StringUtils().isToStringOverriden(new Object().getClass()));
+		Assert.assertFalse(new StringUtils().isToStringOverriden(new Object[] { 1 }.getClass()));
+		Assert.assertTrue(new StringUtils().isToStringOverriden(new String("s").getClass()));
+		Assert.assertTrue(new StringUtils().isToStringOverriden(new Integer(1).getClass()));
 	}
 	
 	@Test

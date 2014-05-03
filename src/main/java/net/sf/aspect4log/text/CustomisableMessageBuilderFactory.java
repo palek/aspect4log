@@ -20,28 +20,16 @@ import net.sf.aspect4log.Log;
 
 public class CustomisableMessageBuilderFactory implements MessageBuilderFactory {
 	public static final String METHOD_ENTER_SYMBOL = "↓";
-	public static final String METHOD_SUCCESSFUL_RETURN_SYMBOL = "↑";
-	public static final String METHOD_EXCEPTION_RETURN_SYMBOL = "⇑";
-	public static final String RETURN_VALUE_SYMBOL = "→";
-	public static final String EXCEPTION_VALUE_SYMBOL = " ⇒ ";
-
-	public static final String ELEMENTS_DELITMETER = ", ";
-	public static final String MAP_KEY_VALUE_DELIMETER = ":";
-	public static final String ARRAY_BEGINS_BRACKET = "{";
-	public static final String ARRAY_ENDS_BRACKET = "}";
-
-	public static final String ITERABLE_BEGINS_BRACKET = "<";
-	public static final String ITERABLE_ENDS_BRACKET = ">";
-
-	public static final String UNDEFINDED_TO_STRING_VALUE = "¿";
-	public static final String NULL_VALUE = "Ø";
-	public static final String ERROR_VALUE = "É";
+	public static final String METHOD_SUCCESSFUL_EXIT_SYMBOL = "↑";
+	public static final String METHOD_THROWN_EXCEPTION_EXIT_SYMBOL = "⇑";
+	public static final String RETURNED_VALUE_SEPORATOR = " → ";
+	public static final String THROWN_EXCEPTION_SEPORATOR = " ⇒ ";
 
 	private String methodEnterSymbol = METHOD_ENTER_SYMBOL;
-	private String methodSuccessfulReturnSymbol = METHOD_SUCCESSFUL_RETURN_SYMBOL;
-	private String returnValueSymbol = RETURN_VALUE_SYMBOL;
-	private String methodExceptionReturSymbol = METHOD_EXCEPTION_RETURN_SYMBOL;
-	private String exceptionValueSymbol = EXCEPTION_VALUE_SYMBOL;
+	private String methodSuccessfulExitSymbol = METHOD_SUCCESSFUL_EXIT_SYMBOL;
+	private String methodThrownExceptionExitSymbol = METHOD_THROWN_EXCEPTION_EXIT_SYMBOL;
+	private String returnedValueSeporator = RETURNED_VALUE_SEPORATOR;
+	private String thrownExceptionSeporator = THROWN_EXCEPTION_SEPORATOR;
 
 	public void setElementsDelitmeter(String elementsDelitmeter) {
 		stringUtils.setElementsDelitmeter(elementsDelitmeter);
@@ -67,36 +55,36 @@ public class CustomisableMessageBuilderFactory implements MessageBuilderFactory 
 		stringUtils.setIterableEndsBracket(iterableEndsBracket);
 	}
 
-	public void setUndefindedToStringValue(String undefindedToStringValue) {
-		stringUtils.setUndefindedToStringValue(undefindedToStringValue);
+	public void setUndefindedToStringMethodSymbol(String undefindedToStringValue) {
+		stringUtils.setUndefindedToStringMethodSymbol(undefindedToStringValue);
 	}
 
-	public void setNullValue(String nullValue) {
-		stringUtils.setNullValue(nullValue);
+	public void setNullSymbol(String nullValue) {
+		stringUtils.setNullSymbol(nullValue);
 	}
 
-	public void setErrorValue(String errorValue) {
-		stringUtils.setErrorValue(errorValue);
+	public void setErrorEvaluatingToStringSymbol(String errorValue) {
+		stringUtils.setErrorEvaluatingToStringSymbol(errorValue);
 	}
 
 	public void setMethodEnterSymbol(String methodEnterSymbol) {
 		this.methodEnterSymbol = methodEnterSymbol;
 	}
 
-	public void setMethodSuccessfulReturnSymbol(String methodSuccessfulReturnSymbol) {
-		this.methodSuccessfulReturnSymbol =methodSuccessfulReturnSymbol;
+	public void setMethodSuccessfulExitSymbol(String methodSuccessfulReturnSymbol) {
+		this.methodSuccessfulExitSymbol = methodSuccessfulReturnSymbol;
 	}
 
-	public void setReturnValueSymbol(String returnValueSymbol) {
-		this.returnValueSymbol = returnValueSymbol;
+	public void setMethodThrownExceptionExitSymbol(String returnValueSymbol) {
+		this.methodThrownExceptionExitSymbol = returnValueSymbol;
 	}
 
-	public void setMethodExceptionReturSymbol(String methodExceptionReturSymbol) {
-		this.methodExceptionReturSymbol = methodExceptionReturSymbol;
+	public void setThrownExceptionSeporator(String methodExceptionReturSymbol) {
+		this.thrownExceptionSeporator = methodExceptionReturSymbol;
 	}
 
-	public void setExceptionValueSymbol(String exceptionValueSymbol) {
-		this.exceptionValueSymbol = exceptionValueSymbol;
+	public void setReturnedValueSeporator(String exceptionValueSymbol) {
+		this.returnedValueSeporator = exceptionValueSymbol;
 	}
 
 	private StringUtils stringUtils = new StringUtils();
@@ -108,7 +96,7 @@ public class CustomisableMessageBuilderFactory implements MessageBuilderFactory 
 
 	@Override
 	public MessageBuilder createSuccessfulReturnMessageBuilder(Integer indent, String indentText, String methodName, Log log, Object[] args, boolean returnsNothing, Object result) {
-		return new SuccessfulReturnMessageBuilder(indent, indentText, methodName, log, args, returnsNothing, result);
+		return new MethodSuccessfulExitMessageBuilder(indent, indentText, methodName, log, args, returnsNothing, result);
 	}
 
 	@Override
@@ -127,14 +115,14 @@ public class CustomisableMessageBuilderFactory implements MessageBuilderFactory 
 
 		@Override
 		public String build() {
-			return stringUtils.toString(log.mdcTemplate(),args);
+			return stringUtils.toString(log.mdcTemplate(), args);
 		}
 	}
 
 	private class EnterMessageBuilder extends CustomisableMessageBulder {
 
 		public EnterMessageBuilder(Integer indent, String indentText, String methodName, Log log, Object[] args) {
-			super(indent, indentText, methodName, log, args,stringUtils);
+			super(indent, indentText, methodName, log, args, stringUtils);
 		}
 
 		@Override
@@ -143,26 +131,26 @@ public class CustomisableMessageBuilderFactory implements MessageBuilderFactory 
 		}
 	}
 
-	private class SuccessfulReturnMessageBuilder extends CustomisableMessageBulder {
+	private class MethodSuccessfulExitMessageBuilder extends CustomisableMessageBulder {
 
 		private final Object result;
 		private final boolean returnsNothing;
 
-		public SuccessfulReturnMessageBuilder(Integer indent, String indentText, String methodName, Log log, Object[] args, boolean returnsNothing, Object result) {
-			super(indent, indentText, methodName, log, args,stringUtils);
+		public MethodSuccessfulExitMessageBuilder(Integer indent, String indentText, String methodName, Log log, Object[] args, boolean returnsNothing, Object result) {
+			super(indent, indentText, methodName, log, args, stringUtils);
 			this.returnsNothing = returnsNothing;
 			this.result = result;
 		}
 
 		@Override
 		protected void buildDirectionSymbol() {
-			getStringBuilder().append(methodSuccessfulReturnSymbol);
+			getStringBuilder().append(methodSuccessfulExitSymbol);
 		}
 
 		@Override
 		protected void buildResultDelimeter() {
 			if (isBuildingResultRequired()) {
-				getStringBuilder().append(returnValueSymbol);
+				getStringBuilder().append(returnedValueSeporator);
 			}
 		}
 
@@ -183,18 +171,18 @@ public class CustomisableMessageBuilderFactory implements MessageBuilderFactory 
 		private final Throwable throwable;
 
 		public ExceptionReturnMessageBuilder(Integer indent, String indentText, String methodName, Log log, Object[] args, Throwable throwable) {
-			super(indent, indentText, methodName, log, args,stringUtils);
+			super(indent, indentText, methodName, log, args, stringUtils);
 			this.throwable = throwable;
 		}
 
 		@Override
 		protected void buildDirectionSymbol() {
-			getStringBuilder().append(methodExceptionReturSymbol);
+			getStringBuilder().append(methodThrownExceptionExitSymbol);
 		}
 
 		@Override
 		protected void buildResultDelimeter() {
-			getStringBuilder().append(exceptionValueSymbol);
+			getStringBuilder().append(thrownExceptionSeporator);
 		}
 
 		@Override

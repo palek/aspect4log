@@ -59,11 +59,16 @@ public class TestFooService {
 	@Test
 	public void testSaveFoo() {
 		fooService.saveFoo("foo");
+		fooService.saveFoo("Foo");
+		Assert.assertEquals(2,fooService.findFoo().size());
 		try {
 			fooService.saveFoo("moo");
 			Assert.fail();
 		} catch (IllegalArgumentException e) {
 			// expected
 		}
+		Assert.assertEquals(2,fooService.findFoo().size());
 	}
+	
 }
+

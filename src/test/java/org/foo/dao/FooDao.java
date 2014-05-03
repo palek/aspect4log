@@ -11,15 +11,13 @@ import org.springframework.stereotype.Repository;
 @Log
 public class FooDao {
 
+	ArrayList<String> list = new ArrayList<String>();
+	
 	public void saveFoo(String foo) {
-
+		list.add(foo);
 	}
 
 	public List<String> findFoo() {
-		ArrayList<String> list = new ArrayList<String>();
-		list.add("foo");
-		list.add("Foo");
-		list.add("Fu");
-		return list;
+		return (List<String>) list.clone();
 	}
 }

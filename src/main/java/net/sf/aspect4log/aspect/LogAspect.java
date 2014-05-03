@@ -44,6 +44,14 @@ public class LogAspect {
 
 	private Configuration configuration = ConfigurationUtils.readConfiguration();
 
+	public Configuration getConfiguration() {
+		return configuration;
+	}
+
+	public void setConfiguration(Configuration configuration) {
+		this.configuration = configuration;
+	}
+
 	private final ThreadLocal<Integer> thraedLocalIndent = new ThreadLocal<Integer>();
 
 	@Around("execution(!@net.sf.aspect4log.Log *(@net.sf.aspect4log.Log *).*(..)) && @target(log)")

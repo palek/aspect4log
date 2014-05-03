@@ -1,9 +1,12 @@
 package org.foo.service;
 
+import static net.sf.aspect4log.LogLevel.DEBUG;
+import static net.sf.aspect4log.LogLevel.ERROR;
+import static net.sf.aspect4log.LogLevel.INFO;
+
 import java.util.List;
 
 import net.sf.aspect4log.Log;
-import net.sf.aspect4log.LogLevel;
 
 import org.foo.dao.FooDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +17,11 @@ import org.springframework.stereotype.Service;
 public class FooService {
 
 	@Autowired
-	FooDao fooDao;
+	private FooDao fooDao;
 
-	@Log(successfulReturnLevel = LogLevel.DEBUG)
+	@Log(enterLevel=INFO, successfulReturnLevel = DEBUG, exceptionReturnLevel=ERROR,argumentsTemplate="passed parameter ${args[0]}")
 	public boolean isFoo(String foo) {
-		return foo.equals("foo");
+		return foo.toLowerCase().startsWith("foo");
 	}
 
 	public boolean isAtLeastOneFoo(Object... foo) {

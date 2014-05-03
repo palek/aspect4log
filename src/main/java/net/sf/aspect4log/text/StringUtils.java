@@ -22,6 +22,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,16 +33,16 @@ import org.apache.commons.lang3.ArrayUtils;
 public class StringUtils {
 
 	private static final String ELEMENTS_DELITMETER = ", ";
-	private static final String MAP_KEY_VALUE_DELIMETER = ":";
-	private static final String ARRAY_BEGINS_BRACKET = "{";
-	private static final String ARRAY_ENDS_BRACKET = "}";
+	private static final String MAP_KEY_VALUE_DELIMETER = "=";
+	private static final String ARRAY_BEGINS_BRACKET = "[";
+	private static final String ARRAY_ENDS_BRACKET = "]";
 
-	private static final String ITERABLE_BEGINS_BRACKET = "<";
-	private static final String ITERABLE_ENDS_BRACKET = ">";
+	private static final String ITERABLE_BEGINS_BRACKET = "{";
+	private static final String ITERABLE_ENDS_BRACKET = "}";
 
-	private static final String UNDEFINDED_TO_STRING_VALUE = "¿";
-	private static final String NULL_VALUE = "Ø";
-	private static final String ERROR_VALUE = "É";
+	private static final String UNDEFINDED_TO_STRING_METHOD_VALUE = null;
+	private static final String NULL_SYBMOL = "null";
+	private static final String ERROR_EVALUATING_TO_STRING_SYBOL = "É";
 
 	private String elementsDelitmeter = ELEMENTS_DELITMETER;
 	private String mapKeyValueDelimeter = MAP_KEY_VALUE_DELIMETER;
@@ -50,9 +52,9 @@ public class StringUtils {
 	private String iterableBeginsBracket = ITERABLE_BEGINS_BRACKET;
 	private String iterableEndsBracket = ITERABLE_ENDS_BRACKET;
 
-	private String undefindedToStringValue = UNDEFINDED_TO_STRING_VALUE;
-	private String nullValue = NULL_VALUE;
-	private String errorValue = ERROR_VALUE;
+	private String undefindedToStringMethodSymbol = UNDEFINDED_TO_STRING_METHOD_VALUE;
+	private String errorEvaluatingToStringSymbol = ERROR_EVALUATING_TO_STRING_SYBOL;
+	private String nullSymbol = NULL_SYBMOL;
 
 	public String getElementsDelitmeter() {
 		return elementsDelitmeter;
@@ -102,28 +104,28 @@ public class StringUtils {
 		this.iterableEndsBracket = iterableEndsBracket;
 	}
 
-	public String getUndefindedToStringValue() {
-		return undefindedToStringValue;
+	public String getUndefindedToStringMethodSymbol() {
+		return undefindedToStringMethodSymbol;
 	}
 
-	public void setUndefindedToStringValue(String undefindedToStringValue) {
-		this.undefindedToStringValue = undefindedToStringValue;
+	public void setUndefindedToStringMethodSymbol(String undefindedToStringValue) {
+		this.undefindedToStringMethodSymbol = undefindedToStringValue;
 	}
 
-	public String getNullValue() {
-		return nullValue;
+	public String getNullSymbol() {
+		return nullSymbol;
 	}
 
-	public void setNullValue(String nullValue) {
-		this.nullValue = nullValue;
+	public void setNullSymbol(String nullValue) {
+		this.nullSymbol = nullValue;
 	}
 
-	public String getErrorValue() {
-		return errorValue;
+	public String getErrorEvaluatingToStringSymbol() {
+		return errorEvaluatingToStringSymbol;
 	}
 
-	public void setErrorValue(String errorValue) {
-		this.errorValue = errorValue;
+	public void setErrorEvaluatingToStringSymbol(String errorValue) {
+		this.errorEvaluatingToStringSymbol = errorValue;
 	}
 
 	private static Method OBJECT_EQUALS_METHOD_TMP = null;
@@ -166,8 +168,6 @@ public class StringUtils {
 	}
 
 	public String toString(Object[] array) {
-		// check if object overrides toString http://stackoverflow.com/questions/12133817/determining-if-a-method-overrides-another-at-runtime
-		// type Ø for null. for not implemented toString ¿
 		StringBuilder stringBuilder = new StringBuilder();
 		for (int i = 0; i < array.length; i++) {
 			toString(stringBuilder, array[i]);
@@ -179,7 +179,6 @@ public class StringUtils {
 	}
 
 	public StringBuilder toString(StringBuilder stringBuilder, Object o) {
-		// TODO add Collection, Map to string implementations
 		if (o != null) {
 			if (o instanceof Object[]) {
 				addArrayBrackets(stringBuilder, toString((Object[]) o));
@@ -204,14 +203,14 @@ public class StringUtils {
 			} else if (o instanceof Collection<?>) {
 				addIterrableBrackets(stringBuilder, toString(((Iterable<?>) o)));
 			} else {
-				if (isToStringOverriden(o)) {
+				if (isToStringOverriden(o.getClass())) {
 					stringBuilder.append(o);
 				} else {
-					stringBuilder.append(undefindedToStringValue);
+					stringBuilder.append(undefindedToStringMethodSymbol);
 				}
 			}
 		} else {
-			stringBuilder.append(nullValue);
+			stringBuilder.append(nullSymbol);
 		}
 		return stringBuilder;
 	}
@@ -230,18 +229,32 @@ public class StringUtils {
 		addBrackets(stringBuilder, iterableBeginsBracket, string, iterableEndsBracket);
 	}
 
-	public boolean isToStringOverriden(Object obj) {
-		if (obj != null) {
-			try {
-				// TODO consider to cache toString methods for each class, cache should be based on Weak References
-				return !obj.getClass().getMethod("toString").equals(OBJECT_EQUALS_METHOD);
-			} catch (NoSuchMethodException | SecurityException e) {
-				// that's impossible
-				return false;
-			}
+// TODO consider implementing cache on WeakHashReferences (yes, because class objects are rare to be gc's it's ok to use WeakHashReferences
+//	private ConcurrentMap<Class<?>, Boolean> classDefaultToStringOverridenMap = new ConcurrentHashMap<Class<?>, Boolean>();
+//
+//	public boolean isToStringOverriden(Class<?> clazz) {
+//		try {
+//			Boolean isDefaultToStringOverriden = classDefaultToStringOverridenMap.get(clazz);
+//			if (isDefaultToStringOverriden == null) {
+//				isDefaultToStringOverriden = !clazz.getMethod("toString").equals(OBJECT_EQUALS_METHOD);
+//				classDefaultToStringOverridenMap.put(clazz, isDefaultToStringOverriden);
+//			}
+//			return isDefaultToStringOverriden;
+//		} catch (NoSuchMethodException | SecurityException e) {
+//			// that's impossible
+//			return false;
+//		}
+//	}
+	
+	public boolean isToStringOverriden(Class<?> clazz) {
+		try {
+			return !clazz.getMethod("toString").equals(OBJECT_EQUALS_METHOD);
+		} catch (NoSuchMethodException | SecurityException e) {
+			// that's impossible
+			return false;
 		}
-		return false;
 	}
+	
 
 	// \$\{(.*)\};
 	private static final Pattern VARIABLE_SEARCH_PATTERN = Pattern.compile("(?!\\$\\{\\$\\{)\\$\\{(.*?)\\}");
@@ -270,7 +283,7 @@ public class StringUtils {
 		try {
 			toString(stringBuilder, PropertyUtils.getProperty(bean, property));
 		} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-			stringBuilder.append(errorValue);
+			stringBuilder.append(errorEvaluatingToStringSymbol);
 		}
 		return stringBuilder.toString();
 

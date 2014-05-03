@@ -7,19 +7,21 @@
 	
 	<messageBuilderFactoryConfiguration class="net.sf.aspect4log.text.CustomisableMessageBuilderFactory">
 			<methodEnterSymbol>↓</methodEnterSymbol>
-			<methodSuccessfulReturnSymbol>↑</methodSuccessfulReturnSymbol>
-			<methodReturnExceptionSymbol>⇑</methodReturnExceptionSymbol>
-			<returnValueSeporatorSymbol>→</returnValueSeporatorSymbol>
-			<exceptionValueSeporatorSymbol>⇒</exceptionValueSeporatorSymbol>
+			<methodSuccessfulExitSymbol>↑</methodSuccessfulExitSymbol>
+			<methodThrownExceptionExitSymbol>⇑</methodThrownExceptionExitSymbol>
+			<returnedValueSeporator>→</returnedValueSeporator>
+			<thrownExceptionSeporator>⇒</thrownExceptionSeporator>
+			
 			<elementsDelitmeter>, </elementsDelitmeter>
 			<mapKeyValueDelimeter>=</mapKeyValueDelimeter>
-			<arrayBeginsBracket>{</arrayBeginsBracket>
-			<arrayEndsBracket>}</arrayEndsBracket>
-			<iterableBeginsBracket>&lt;</iterableBeginsBracket>
-			<iterableEndsBracket>&gt;</iterableEndsBracket>
-			<undefindedToStringValue>¿</undefindedToStringValue>
-			<nullValue>Ø</nullValue>
-			<errorValue>É</errorValue>
+			<arrayBeginsBracket>[</arrayBeginsBracket>
+			<arrayEndsBracket>]</arrayEndsBracket>
+			<iterableBeginsBracket>{</iterableBeginsBracket>
+			<iterableEndsBracket>}</iterableEndsBracket>
+			<undefindedToStringMethodSymbol>¿</undefindedToStringMethodSymbol>
+			<errorEvaluatingToStringSymbol>É</errorEvaluatingToStringSymbol>
+			<nullSymbol>Ø</nullSymbol>
+			
 	</messageBuilderFactoryConfiguration>
 	
 </aspect4logConfiguration>
