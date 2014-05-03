@@ -19,7 +19,12 @@ public class FooService {
 	@Autowired
 	private FooDao fooDao;
 
-	@Log(enterLevel=INFO, successfulReturnLevel = DEBUG, exceptionReturnLevel=ERROR,argumentsTemplate="passed parameter ${args[0]}")
+	@Log(enterLevel=INFO, successfulExitLevel = DEBUG, exceptionExitLevel=ERROR,argumentsTemplate="oo={${args[0]},${args[1]}}")
+	public void doFoo(Object... oo){
+		
+	}
+	
+	@Log(enterLevel=INFO, successfulExitLevel = DEBUG, exceptionExitLevel=ERROR,argumentsTemplate="foo=${args[0]}")
 	public boolean isFoo(String foo) {
 		return foo.toLowerCase().startsWith("foo");
 	}
@@ -37,7 +42,7 @@ public class FooService {
 		return fooDao.findFoo();
 	}
 
-	@Log(argumentsTemplate="args were: ${args[0]}",exceptionTemplate="Here goes only ${exception.message}")
+	@Log(argumentsTemplate="args were: ${args[0]}",exceptionTemplate="Ended with Exception saying : ${exception.message}")
 	public void saveFoo(String foo) {
 		if (isFoo(foo)) {
 			fooDao.saveFoo(foo);

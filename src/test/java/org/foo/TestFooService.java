@@ -21,6 +21,12 @@ public class TestFooService {
 	@Autowired
 	private FooService fooService;
 
+	
+	@Test
+	public void testArgsOutOfBounds() {
+		fooService.doFoo();
+	}
+	
 	@Test
 	public void isFoo() {
 		Assert.assertTrue(fooService.isFoo("foo"));
@@ -53,7 +59,7 @@ public class TestFooService {
 		Map<Object,Object> map = new HashMap<>();
 		map.put("key1", "value1");
 		map.put(new Integer(1), new Thread());
-		Assert.assertFalse(fooService.isAtLeastOneFoo("boo", new Object(),list,map));
+		Assert.assertFalse(fooService.isAtLeastOneFoo(new ToStringBreaker(),"boo", new Object(),list,map));
 	}
 
 	@Test
@@ -72,3 +78,12 @@ public class TestFooService {
 	
 }
 
+class ToStringBreaker{
+
+	@Override
+	public String toString() {
+		
+		throw new RuntimeException("Exception in toString()");
+	}
+	
+}

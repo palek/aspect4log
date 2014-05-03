@@ -19,8 +19,8 @@ public class UtilsTest {
 		String s = "s";
 		int[] ii = { 1, 2 };
 		Object[] args = { i, s, ii };
-		System.out.println(new StringUtils().toString("args are: ${args[1]}, ${args}",  args));
-		System.out.println(new StringUtils().toString("${${args[0]}}, ${args[2]}",  args));
+		Assert.assertEquals( "args are: s, [5, s, [1, 2]]", new StringUtils().toString("args are: ${args[1]}, ${args}",  args));
+		Assert.assertEquals("${5}, [1, 2]",new StringUtils().toString("${${args[0]}}, ${args[2]}",  args));
 	}
 
 }

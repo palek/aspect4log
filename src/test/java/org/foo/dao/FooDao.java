@@ -17,6 +17,7 @@ public class FooDao {
 		list.add(foo);
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<String> findFoo() {
 		return (List<String>) list.clone();
 	}

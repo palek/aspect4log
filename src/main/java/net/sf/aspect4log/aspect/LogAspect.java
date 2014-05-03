@@ -22,7 +22,6 @@ import net.sf.aspect4log.conf.Configuration;
 import net.sf.aspect4log.conf.ConfigurationUtils;
 import net.sf.aspect4log.text.MessageBuilder;
 import net.sf.aspect4log.text.MessageBuilderFactory;
-import net.sf.aspect4log.text.StringUtils;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -77,11 +76,11 @@ public class LogAspect {
 			// boolean returnsNothing = "void".equals(returnClass.getCanonicalName());
 			boolean returnsNothing = Void.TYPE.equals(returnClass);
 			MessageBuilder successfulReturnMessageBuilder = factory.createSuccessfulReturnMessageBuilder(thraedLocalIndent.get(), configuration.getIndentText(), pjp.getSignature().getName(), log, pjp.getArgs(), returnsNothing, result);
-			log(logger, log.successfulReturnLevel(), successfulReturnMessageBuilder);
+			log(logger, log.successfulExitLevel(), successfulReturnMessageBuilder);
 			return result;
 		} catch (Throwable e) {
 			MessageBuilder exceptionReturnMessageBuilder = factory.createExceptionReturnMessageBuilder(thraedLocalIndent.get(), configuration.getIndentText(), pjp.getSignature().getName(), log, pjp.getArgs(), e);
-			log(logger, log.exceptionReturnLevel(), exceptionReturnMessageBuilder);
+			log(logger, log.exceptionExitLevel(), exceptionReturnMessageBuilder);
 			throw e;
 		} finally {
 			decreaseIndent(log);

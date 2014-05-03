@@ -22,8 +22,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,17 +30,14 @@ import org.apache.commons.lang3.ArrayUtils;
 
 public class StringUtils {
 
-	private static final String ELEMENTS_DELITMETER = ", ";
-	private static final String MAP_KEY_VALUE_DELIMETER = "=";
-	private static final String ARRAY_BEGINS_BRACKET = "[";
-	private static final String ARRAY_ENDS_BRACKET = "]";
+	public static final String ELEMENTS_DELITMETER = ", ";
+	public static final String MAP_KEY_VALUE_DELIMETER = "=";
+	public static final String ARRAY_BEGINS_BRACKET = "[";
+	public static final String ARRAY_ENDS_BRACKET = "]";
 
-	private static final String ITERABLE_BEGINS_BRACKET = "{";
-	private static final String ITERABLE_ENDS_BRACKET = "}";
+	public static final String ITERABLE_BEGINS_BRACKET = "{";
+	public static final String ITERABLE_ENDS_BRACKET = "}";
 
-	private static final String UNDEFINDED_TO_STRING_METHOD_VALUE = null;
-	private static final String NULL_SYBMOL = "null";
-	private static final String ERROR_EVALUATING_TO_STRING_SYBOL = "É";
 
 	private String elementsDelitmeter = ELEMENTS_DELITMETER;
 	private String mapKeyValueDelimeter = MAP_KEY_VALUE_DELIMETER;
@@ -52,9 +47,9 @@ public class StringUtils {
 	private String iterableBeginsBracket = ITERABLE_BEGINS_BRACKET;
 	private String iterableEndsBracket = ITERABLE_ENDS_BRACKET;
 
-	private String undefindedToStringMethodSymbol = UNDEFINDED_TO_STRING_METHOD_VALUE;
-	private String errorEvaluatingToStringSymbol = ERROR_EVALUATING_TO_STRING_SYBOL;
-	private String nullSymbol = NULL_SYBMOL;
+	private String undefindedToStringMethodSymbol;
+	private String errorEvaluatingToStringSymbol;
+	private String nullSymbol;
 
 	public String getElementsDelitmeter() {
 		return elementsDelitmeter;
@@ -132,7 +127,10 @@ public class StringUtils {
 	static {
 		try {
 			OBJECT_EQUALS_METHOD_TMP = Object.class.getMethod("toString");
-		} catch (NoSuchMethodException | SecurityException e) {
+		} catch (NoSuchMethodException e) {
+			// that's impossible
+			throw new ExceptionInInitializerError(e);
+		} catch (SecurityException e) {
 			// that's impossible
 			throw new ExceptionInInitializerError(e);
 		}
@@ -203,8 +201,13 @@ public class StringUtils {
 			} else if (o instanceof Collection<?>) {
 				addIterrableBrackets(stringBuilder, toString(((Iterable<?>) o)));
 			} else {
-				if (isToStringOverriden(o.getClass())) {
-					stringBuilder.append(o);
+				if (isToStringOverriden(o.getClass()) || undefindedToStringMethodSymbol==null) {
+					try{
+						stringBuilder.append(o);
+					}catch(RuntimeException e){
+						addExceptionOnToStringEvaluation(stringBuilder,e.toString());
+					}
+						
 				} else {
 					stringBuilder.append(undefindedToStringMethodSymbol);
 				}
@@ -248,8 +251,11 @@ public class StringUtils {
 	
 	public boolean isToStringOverriden(Class<?> clazz) {
 		try {
-			return !clazz.getMethod("toString").equals(OBJECT_EQUALS_METHOD);
-		} catch (NoSuchMethodException | SecurityException e) {
+			return !OBJECT_EQUALS_METHOD.equals(clazz.getMethod("toString"));
+		} catch (NoSuchMethodException e) {
+			// that's impossible
+			return false;
+		} catch (SecurityException e) {
 			// that's impossible
 			return false;
 		}
@@ -282,11 +288,25 @@ public class StringUtils {
 		StringBuilder stringBuilder = new StringBuilder();
 		try {
 			toString(stringBuilder, PropertyUtils.getProperty(bean, property));
-		} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-			stringBuilder.append(errorEvaluatingToStringSymbol);
+		} catch (IllegalAccessException e) {
+			addExceptionOnToStringEvaluation(stringBuilder, e.getCause().toString());
+		} catch (InvocationTargetException e) {
+			addExceptionOnToStringEvaluation(stringBuilder, e.getCause().toString());
+		} catch (NoSuchMethodException e) {
+			addExceptionOnToStringEvaluation(stringBuilder, e.getCause().toString());
+		} catch(Exception e){
+			addExceptionOnToStringEvaluation(stringBuilder, "#Warning!!! Template caused:  " + e + " #");
 		}
 		return stringBuilder.toString();
 
+	}
+
+	private void addExceptionOnToStringEvaluation(StringBuilder stringBuilder, String errorMessage) {
+		if(errorEvaluatingToStringSymbol==null){
+			stringBuilder.append(errorMessage);
+		}else{
+			stringBuilder.append(errorEvaluatingToStringSymbol);
+		}
 	}
 
 	public static class EnclosingBean {

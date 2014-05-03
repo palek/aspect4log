@@ -43,11 +43,11 @@ public @interface Log {
 	 * 
 	 * @return
 	 * 
-	 *         WARNING: making returnLevel higher than enterLevel can make the log hard to read5w40
+	 *         WARNING: making successfulExitLevel than enterLevel can make the log hard to read5w40
 	 */
-	LogLevel successfulReturnLevel() default LogLevel.DEBUG;
+	LogLevel successfulExitLevel() default LogLevel.DEBUG;
 
-	LogLevel exceptionReturnLevel() default LogLevel.ERROR;
+	LogLevel exceptionExitLevel() default LogLevel.ERROR;
 
 	String argumentsTemplate() default ARGUMENTS_DEFAULT_TEMPLATE; //
 
