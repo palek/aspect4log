@@ -52,11 +52,11 @@ public class TestFooService {
 	public void testOneIsFoo() {
 		Assert.assertTrue(fooService.isAtLeastOneFoo("boo", "foo",new Object()));
 		
-		List<String> list = new ArrayList<>();
+		List<String> list = new ArrayList<String>();
 		list.add("l1");
 		list.add("l2");
 		
-		Map<Object,Object> map = new HashMap<>();
+		Map<Object,Object> map = new HashMap<Object,Object>();
 		map.put("key1", "value1");
 		map.put(new Integer(1), new Thread());
 		Assert.assertFalse(fooService.isAtLeastOneFoo(new ToStringBreaker(),"boo", new Object(),list,map));

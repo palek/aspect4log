@@ -16,6 +16,7 @@
  */
 package net.sf.aspect4log.aspect;
 
+import net.sf.aspect4log.ExceptionExit;
 import net.sf.aspect4log.Log;
 import net.sf.aspect4log.LogLevel;
 import net.sf.aspect4log.conf.Configuration;
@@ -70,17 +71,32 @@ public class LogAspect {
 			increaseIndent(log);
 			setMDC(log, pjp.getArgs());
 			MessageBuilder enterMessageBuilder = factory.createEnterMessageBuilder(thraedLocalIndent.get(), configuration.getIndentText(), pjp.getSignature().getName(), log, pjp.getArgs());
-			log(logger, log.enterLevel(), enterMessageBuilder);
+			log(logger, log.enterLevel(), enterMessageBuilder, null);
 			Object result = pjp.proceed();
 			Class<?> returnClass = ((MethodSignature) pjp.getSignature()).getReturnType();
-			// boolean returnsNothing = "void".equals(returnClass.getCanonicalName());
 			boolean returnsNothing = Void.TYPE.equals(returnClass);
 			MessageBuilder successfulReturnMessageBuilder = factory.createSuccessfulReturnMessageBuilder(thraedLocalIndent.get(), configuration.getIndentText(), pjp.getSignature().getName(), log, pjp.getArgs(), returnsNothing, result);
-			log(logger, log.successfulExitLevel(), successfulReturnMessageBuilder);
+			log(logger, log.exitLevel(), successfulReturnMessageBuilder, null);
 			return result;
 		} catch (Throwable e) {
-			MessageBuilder exceptionReturnMessageBuilder = factory.createExceptionReturnMessageBuilder(thraedLocalIndent.get(), configuration.getIndentText(), pjp.getSignature().getName(), log, pjp.getArgs(), e);
-			log(logger, log.exceptionExitLevel(), exceptionReturnMessageBuilder);
+			
+
+			LogLevel logLevel = LogLevel.ERROR;
+			Throwable throwable = e;
+			String template = ExceptionExit.EXCEPTION_DEFAULT_TEMPLATE;
+			exceptionExitSearchLoop:
+			for (ExceptionExit exceptionExit : log.exceptionExits()) {
+				for (Class<? extends Throwable> t : exceptionExit.exceptions()) {
+					if (t.isAssignableFrom(e.getClass())) {
+						logLevel = exceptionExit.level();
+						throwable = exceptionExit.printStackTrace() ? e : null;
+						template = exceptionExit.exceptionTemplate();
+						break exceptionExitSearchLoop;
+					}
+				}
+			}
+			MessageBuilder exceptionReturnMessageBuilder = factory.createExceptionReturnMessageBuilder(thraedLocalIndent.get(), configuration.getIndentText(), pjp.getSignature().getName(), log, pjp.getArgs(), e,template);
+			log(logger, logLevel, exceptionReturnMessageBuilder, throwable);
 			throw e;
 		} finally {
 			decreaseIndent(log);
@@ -100,7 +116,6 @@ public class LogAspect {
 			MDC.remove(log.mdcKey());
 		}
 	}
-
 
 	private void increaseIndent(Log log) {
 		if (configuration.isUseIndent()) {
@@ -123,31 +138,31 @@ public class LogAspect {
 		}
 	}
 
-	private void log(Logger logger, LogLevel level, MessageBuilder messageBuilder) {
+	private void log(Logger logger, LogLevel level, MessageBuilder messageBuilder, Throwable throable) {
 		switch (level) {
 		case TRACE:
 			if (logger.isTraceEnabled()) {
-				logger.trace(messageBuilder.build());
+				logger.trace(messageBuilder.build(), throable);
 			}
 			break;
 		case DEBUG:
 			if (logger.isDebugEnabled()) {
-				logger.debug(messageBuilder.build());
+				logger.debug(messageBuilder.build(), throable);
 			}
 			break;
 		case INFO:
 			if (logger.isInfoEnabled()) {
-				logger.info(messageBuilder.build());
+				logger.info(messageBuilder.build(), throable);
 			}
 			break;
 		case WARN:
 			if (logger.isWarnEnabled()) {
-				logger.warn(messageBuilder.build());
+				logger.warn(messageBuilder.build(), throable);
 			}
 			break;
 		case ERROR:
 			if (logger.isErrorEnabled()) {
-				logger.error(messageBuilder.build());
+				logger.error(messageBuilder.build(), throable);
 			}
 			break;
 		}

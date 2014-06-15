@@ -100,8 +100,8 @@ public class CustomisableMessageBuilderFactory implements MessageBuilderFactory 
 	}
 
 	@Override
-	public MessageBuilder createExceptionReturnMessageBuilder(Integer indent, String indentText, String methodName, Log log, Object[] args, Throwable throwable) {
-		return new ExceptionReturnMessageBuilder(indent, indentText, methodName, log, args, throwable);
+	public MessageBuilder createExceptionReturnMessageBuilder(Integer indent, String indentText, String methodName, Log log, Object[] args, Throwable throwable,String exceptionExitTemplate) {
+		return new ExceptionReturnMessageBuilder(indent, indentText, methodName, log, args, throwable,exceptionExitTemplate);
 	}
 
 	private final class SimpleMdcMessageBuilder implements MessageBuilder {
@@ -169,10 +169,12 @@ public class CustomisableMessageBuilderFactory implements MessageBuilderFactory 
 	private class ExceptionReturnMessageBuilder extends CustomisableMessageBulder {
 
 		private final Throwable throwable;
+		private String exceptionExitTemplate;
 
-		public ExceptionReturnMessageBuilder(Integer indent, String indentText, String methodName, Log log, Object[] args, Throwable throwable) {
+		public ExceptionReturnMessageBuilder(Integer indent, String indentText, String methodName, Log log, Object[] args, Throwable throwable, String exceptionExitTemplate) {
 			super(indent, indentText, methodName, log, args, stringUtils);
 			this.throwable = throwable;
+			this.exceptionExitTemplate = exceptionExitTemplate;
 		}
 
 		@Override
@@ -187,8 +189,8 @@ public class CustomisableMessageBuilderFactory implements MessageBuilderFactory 
 
 		@Override
 		protected void buildResult() {
-			if (!getLog().exceptionTemplate().isEmpty()) {
-				getStringBuilder().append(stringUtils.toString(getLog().exceptionTemplate(), throwable));
+			if (!exceptionExitTemplate.isEmpty()) {
+				getStringBuilder().append(stringUtils.toString(exceptionExitTemplate, throwable));
 			}
 		}
 	}

@@ -1,7 +1,6 @@
 package org.foo.service;
 
 import static net.sf.aspect4log.LogLevel.DEBUG;
-import static net.sf.aspect4log.LogLevel.ERROR;
 import static net.sf.aspect4log.LogLevel.INFO;
 
 import java.util.List;
@@ -19,12 +18,12 @@ public class FooService {
 	@Autowired
 	private FooDao fooDao;
 
-	@Log(enterLevel=INFO, successfulExitLevel = DEBUG, exceptionExitLevel=ERROR,argumentsTemplate="oo={${args[0]},${args[1]}}")
+	@Log(enterLevel=INFO, exitLevel = DEBUG, argumentsTemplate="oo={${args[0]},${args[1]}}")
 	public void doFoo(Object... oo){
 		
 	}
 	
-	@Log(enterLevel=INFO, successfulExitLevel = DEBUG, exceptionExitLevel=ERROR,argumentsTemplate="foo=${args[0]}")
+	@Log(enterLevel=INFO, exitLevel = DEBUG, argumentsTemplate="foo=${args[0]}")
 	public boolean isFoo(String foo) {
 		return foo.toLowerCase().startsWith("foo");
 	}
@@ -42,7 +41,7 @@ public class FooService {
 		return fooDao.findFoo();
 	}
 
-	@Log(argumentsTemplate="args were: ${args[0]}",exceptionTemplate="Ended with Exception saying : ${exception.message}")
+	@Log(argumentsTemplate="args were: ${args[0]}")
 	public void saveFoo(String foo) {
 		if (isFoo(foo)) {
 			fooDao.saveFoo(foo);

@@ -17,11 +17,11 @@
 
 package net.sf.aspect4log;
 
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import static net.sf.aspect4log.LogLevel.*;
 
 /**
  * 
@@ -35,7 +35,7 @@ import java.lang.annotation.Target;
 public @interface Log {
 	public static final String ARGUMENTS_DEFAULT_TEMPLATE = "${args}";
 	public static final String RESULT_DEFAULT_TEMPLATE = "${result}";
-	public static final String EXCEPTION_DEFAULT_TEMPLATE = "${exception}";
+	
 
 	LogLevel enterLevel() default LogLevel.INFO;
 
@@ -43,11 +43,11 @@ public @interface Log {
 	 * 
 	 * @return
 	 * 
-	 *         WARNING: making successfulExitLevel than enterLevel can make the log hard to read5w40
+	 *         WARNING: making successfulExitLevel than enterLevel can make the log hard to read
 	 */
-	LogLevel successfulExitLevel() default LogLevel.DEBUG;
+	LogLevel exitLevel() default LogLevel.DEBUG;
 
-	LogLevel exceptionExitLevel() default LogLevel.ERROR;
+	ExceptionExit[] exceptionExits() default { @ExceptionExit(level = ERROR, exceptions = { RuntimeException.class }, printStackTrace = true), @ExceptionExit(level = WARN, exceptions = { Exception.class }, printStackTrace = false) };
 
 	String argumentsTemplate() default ARGUMENTS_DEFAULT_TEMPLATE; //
 
@@ -68,16 +68,5 @@ public @interface Log {
 	 * @return An mdc patter. Can be any expression using $args bean
 	 */
 	String mdcTemplate() default "";
-
-	
-
-	/**
-	 * default value is $exception
-	 * @return $exception
-	 */
-	String exceptionTemplate() default EXCEPTION_DEFAULT_TEMPLATE;
-
-	
-
 
 }
