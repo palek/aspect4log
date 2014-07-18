@@ -43,13 +43,13 @@ public @interface Log {
 	 * 
 	 * @return
 	 * 
-	 *         WARNING: making successfulExitLevel than enterLevel can make the log hard to read
+	 *         WARNING: making exitLevel than enterLevel can make the log hard to read
 	 */
 	LogLevel exitLevel() default LogLevel.DEBUG;
 
 	ExceptionExit[] exceptionExits() default { @ExceptionExit(level = ERROR, exceptions = { RuntimeException.class }, printStackTrace = true), @ExceptionExit(level = WARN, exceptions = { Exception.class }, printStackTrace = false) };
 
-	String argumentsTemplate() default ARGUMENTS_DEFAULT_TEMPLATE; //
+	String argumentsTemplate() default ARGUMENTS_DEFAULT_TEMPLATE;
 
 	/**
 	 * 
