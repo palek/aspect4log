@@ -1,4 +1,4 @@
-/*  This file is part of the aspect  project.
+/*  This file is part of the aspect4log  project.
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public License
  as published by the Free Software Foundation; version 2.1
@@ -16,11 +16,11 @@
  */
 package net.sf.aspect4log.aspect;
 
-import net.sf.aspect4log.ExceptionExit;
+import net.sf.aspect4log.LogException;
 import net.sf.aspect4log.Log;
 import net.sf.aspect4log.LogLevel;
-import net.sf.aspect4log.conf.Configuration;
-import net.sf.aspect4log.conf.ConfigurationUtils;
+import net.sf.aspect4log.conf.LogFormatConfiguration;
+import net.sf.aspect4log.conf.LogFormatConfigurationUtils;
 import net.sf.aspect4log.text.MessageBuilder;
 import net.sf.aspect4log.text.MessageBuilderFactory;
 
@@ -42,16 +42,24 @@ import org.slf4j.MDC;
 @Aspect
 public class LogAspect {
 
-	private Configuration configuration = ConfigurationUtils.readConfiguration();
+	private final LogFormatConfiguration logFormatConfiguration;
 
-	public Configuration getConfiguration() {
-		return configuration;
+	public LogFormatConfiguration getLogFormatConfiguration() {
+		return logFormatConfiguration;
 	}
 
-	public void setConfiguration(Configuration configuration) {
-		this.configuration = configuration;
+	public LogAspect() {
+		logFormatConfiguration=LogFormatConfigurationUtils.readConfiguration();
 	}
 
+	public LogAspect(LogFormatConfiguration logFormatConfiguration) {
+		if(logFormatConfiguration==null){
+			throw new NullPointerException();
+		}
+		this.logFormatConfiguration = logFormatConfiguration;
+	}
+
+	
 	private final ThreadLocal<Integer> thraedLocalIndent = new ThreadLocal<Integer>();
 
 	@Around("execution(!@net.sf.aspect4log.Log *(@net.sf.aspect4log.Log *).*(..)) && @target(log)")
@@ -64,18 +72,22 @@ public class LogAspect {
 		return log(pjp, log);
 	}
 
+	public final Integer getThreadLocalIdent(){
+		return thraedLocalIndent.get();
+	}
+	
 	private Object log(ProceedingJoinPoint pjp, Log log) throws Throwable {
 		Logger logger = LoggerFactory.getLogger(pjp.getTarget().getClass());
-		MessageBuilderFactory factory = configuration.getMessageBuilderFactory();
+		MessageBuilderFactory factory = logFormatConfiguration.getMessageBuilderFactory();
 		try {
 			increaseIndent(log);
 			setMDC(log, pjp.getArgs());
-			MessageBuilder enterMessageBuilder = factory.createEnterMessageBuilder(thraedLocalIndent.get(), configuration.getIndentText(), pjp.getSignature().getName(), log, pjp.getArgs());
+			MessageBuilder enterMessageBuilder = factory.createEnterMessageBuilder(getThreadLocalIdent(), logFormatConfiguration.getIndentText(), pjp.getSignature().getName(), log, pjp.getArgs());
 			log(logger, log.enterLevel(), enterMessageBuilder, null);
 			Object result = pjp.proceed();
 			Class<?> returnClass = ((MethodSignature) pjp.getSignature()).getReturnType();
 			boolean returnsNothing = Void.TYPE.equals(returnClass);
-			MessageBuilder successfulReturnMessageBuilder = factory.createSuccessfulReturnMessageBuilder(thraedLocalIndent.get(), configuration.getIndentText(), pjp.getSignature().getName(), log, pjp.getArgs(), returnsNothing, result);
+			MessageBuilder successfulReturnMessageBuilder = factory.createSuccessfulReturnMessageBuilder(getThreadLocalIdent(), logFormatConfiguration.getIndentText(), pjp.getSignature().getName(), log, pjp.getArgs(), returnsNothing, result);
 			log(logger, log.exitLevel(), successfulReturnMessageBuilder, null);
 			return result;
 		} catch (Throwable e) {
@@ -83,19 +95,19 @@ public class LogAspect {
 
 			LogLevel logLevel = LogLevel.ERROR;
 			Throwable throwable = e;
-			String template = ExceptionExit.EXCEPTION_DEFAULT_TEMPLATE;
+			String template = LogException.EXCEPTION_DEFAULT_TEMPLATE;
 			exceptionExitSearchLoop:
-			for (ExceptionExit exceptionExit : log.exceptionExits()) {
-				for (Class<? extends Throwable> t : exceptionExit.exceptions()) {
+			for (LogException logException : log.logExceptions()) {
+				for (Class<? extends Throwable> t : logException.exceptions()) {
 					if (t.isAssignableFrom(e.getClass())) {
-						logLevel = exceptionExit.level();
-						throwable = exceptionExit.printStackTrace() ? e : null;
-						template = exceptionExit.exceptionTemplate();
+						logLevel = logException.level();
+						throwable = logException.printStackTrace() ? e : null;
+						template = logException.exceptionTemplate();
 						break exceptionExitSearchLoop;
 					}
 				}
 			}
-			MessageBuilder exceptionReturnMessageBuilder = factory.createExceptionReturnMessageBuilder(thraedLocalIndent.get(), configuration.getIndentText(), pjp.getSignature().getName(), log, pjp.getArgs(), e,template);
+			MessageBuilder exceptionReturnMessageBuilder = factory.createExceptionReturnMessageBuilder(getThreadLocalIdent(), logFormatConfiguration.getIndentText(), pjp.getSignature().getName(), log, pjp.getArgs(), e,template);
 			log(logger, logLevel, exceptionReturnMessageBuilder, throwable);
 			throw e;
 		} finally {
@@ -106,7 +118,7 @@ public class LogAspect {
 
 	private void setMDC(Log log, Object[] args) {
 		if (!log.mdcKey().isEmpty()) {
-			MessageBuilder mdcMessageBuilder = configuration.getMessageBuilderFactory().createMdcTemplate(log, args);
+			MessageBuilder mdcMessageBuilder = logFormatConfiguration.getMessageBuilderFactory().createMdcTemplate(log, args);
 			MDC.put(log.mdcKey(), mdcMessageBuilder.build());
 		}
 	}
@@ -118,7 +130,7 @@ public class LogAspect {
 	}
 
 	private void increaseIndent(Log log) {
-		if (configuration.isUseIndent()) {
+		if (logFormatConfiguration.isUseIndent()) {
 			if (thraedLocalIndent.get() == null) {
 				thraedLocalIndent.set(0);
 			} else if (thraedLocalIndent.get() != null) {
@@ -167,5 +179,5 @@ public class LogAspect {
 			break;
 		}
 	}
-
+	
 }

@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.sf.aspect4log</groupId>
-	<artifactId>apsect4log</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<artifactId>aspect4log</artifactId>
+	<version>1.0.0</version>
 	<inceptionYear>2013</inceptionYear>
 	<name>${project.artifactId}</name>
 	<parent><!-- it describes distribution management for snapshot and stage repository -->
@@ -16,7 +16,6 @@
 	<organization>
 		<name>Semochkin Vitaly Evgenevich</name>
 	</organization>
-
 
 	<licenses>
 		<license>

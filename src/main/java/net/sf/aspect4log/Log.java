@@ -1,4 +1,4 @@
-/*  This file is part of the aspect  project.
+/*  This file is part of the aspect4log  project.
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public License
  as published by the Free Software Foundation; version 2.1
@@ -47,7 +47,11 @@ public @interface Log {
 	 */
 	LogLevel exitLevel() default LogLevel.DEBUG;
 
-	ExceptionExit[] exceptionExits() default { @ExceptionExit(level = ERROR, exceptions = { RuntimeException.class }, printStackTrace = true), @ExceptionExit(level = WARN, exceptions = { Exception.class }, printStackTrace = false) };
+	/**
+	 * defines how exit on exception is logged
+	 * @return
+	 */
+	LogException[] logExceptions() default { @LogException(level = ERROR, exceptions = { RuntimeException.class }, printStackTrace = true), @LogException(level = WARN, exceptions = { Exception.class }, printStackTrace = false) };
 
 	String argumentsTemplate() default ARGUMENTS_DEFAULT_TEMPLATE;
 

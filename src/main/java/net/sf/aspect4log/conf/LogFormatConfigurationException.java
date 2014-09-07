@@ -1,4 +1,4 @@
-/* This file is part of the aspect4log  project.
+/*  This file is part of the aspect4log  project.
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public License
  as published by the Free Software Foundation; version 2.1
@@ -14,14 +14,18 @@
  Copyright 2007-2014 Semochkin Vitaliy Evgenevich aka Yilativs
   
  */
+package net.sf.aspect4log.conf;
 
-package net.sf.aspect4log;
+public class LogFormatConfigurationException extends RuntimeException {
 
-/**
- * Represents log level that will be passed to Logging framework.
- * 
- * @author Vitaliy S <a href="mailto:vitaliy.se@gmail.com">
- */
-public enum LogLevel {
-	TRACE, DEBUG, INFO, WARN, ERROR
+	private static final long serialVersionUID = -3397749350256923573L;
+
+	public LogFormatConfigurationException() {
+		super();
+	}
+
+	public LogFormatConfigurationException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
 }

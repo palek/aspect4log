@@ -11,9 +11,9 @@ public class ConfigurationUtilsTest {
 	@Test
 	public void readConfiguration() {
 
-		Configuration configuration = ConfigurationUtils.readConfiguration();
+		LogFormatConfiguration logFormatConfiguration = LogFormatConfigurationUtils.readConfiguration();
 		
-		Assert.assertEquals("\t", configuration.getIndentText());
-		Assert.assertEquals(CustomisableMessageBuilderFactory.class, configuration.getMessageBuilderFactory().getClass());
+		Assert.assertEquals("\t", logFormatConfiguration.getIndentText());
+		Assert.assertEquals(CustomisableMessageBuilderFactory.class, logFormatConfiguration.getMessageBuilderFactory().getClass());
 	}
 }
