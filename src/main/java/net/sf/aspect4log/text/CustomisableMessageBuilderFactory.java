@@ -32,39 +32,39 @@ public class CustomisableMessageBuilderFactory implements MessageBuilderFactory 
 	private String thrownExceptionSeporator = THROWN_EXCEPTION_SEPORATOR;
 
 	public void setElementsDelitmeter(String elementsDelitmeter) {
-		stringUtils.setElementsDelitmeter(elementsDelitmeter);
+		logFormatter.setElementsDelitmeter(elementsDelitmeter);
 	}
 
 	public void setMapKeyValueDelimeter(String mapKeyValueDelimeter) {
-		stringUtils.setMapKeyValueDelimeter(mapKeyValueDelimeter);
+		logFormatter.setMapKeyValueDelimeter(mapKeyValueDelimeter);
 	}
 
 	public void setArrayBeginsBracket(String arrayBeginsBracket) {
-		stringUtils.setArrayBeginsBracket(arrayBeginsBracket);
+		logFormatter.setArrayBeginsBracket(arrayBeginsBracket);
 	}
 
 	public void setArrayEndsBracket(String arrayEndsBracket) {
-		stringUtils.setArrayEndsBracket(arrayEndsBracket);
+		logFormatter.setArrayEndsBracket(arrayEndsBracket);
 	}
 
 	public void setIterableBeginsBracket(String iterableBeginsBracket) {
-		stringUtils.setIterableBeginsBracket(iterableBeginsBracket);
+		logFormatter.setIterableBeginsBracket(iterableBeginsBracket);
 	}
 
 	public void setIterableEndsBracket(String iterableEndsBracket) {
-		stringUtils.setIterableEndsBracket(iterableEndsBracket);
+		logFormatter.setIterableEndsBracket(iterableEndsBracket);
 	}
 
 	public void setUndefindedToStringMethodSymbol(String undefindedToStringValue) {
-		stringUtils.setUndefindedToStringMethodSymbol(undefindedToStringValue);
+		logFormatter.setUndefindedToStringMethodSymbol(undefindedToStringValue);
 	}
 
 	public void setNullSymbol(String nullValue) {
-		stringUtils.setNullSymbol(nullValue);
+		logFormatter.setNullSymbol(nullValue);
 	}
 
 	public void setErrorEvaluatingToStringSymbol(String errorValue) {
-		stringUtils.setErrorEvaluatingToStringSymbol(errorValue);
+		logFormatter.setErrorEvaluatingToStringSymbol(errorValue);
 	}
 
 	public void setMethodEnterSymbol(String methodEnterSymbol) {
@@ -87,7 +87,7 @@ public class CustomisableMessageBuilderFactory implements MessageBuilderFactory 
 		this.returnedValueSeporator = exceptionValueSymbol;
 	}
 
-	private StringUtils stringUtils = new StringUtils();
+	private LogFormatter logFormatter = new LogFormatter();
 
 	@Override
 	public MessageBuilder createEnterMessageBuilder(Integer indent, String indentText, String methodName, Log log, Object[] args) {
@@ -115,14 +115,14 @@ public class CustomisableMessageBuilderFactory implements MessageBuilderFactory 
 
 		@Override
 		public String build() {
-			return stringUtils.toString(log.mdcTemplate(), args);
+			return logFormatter.toString(log.mdcTemplate(), args);
 		}
 	}
 
 	private class EnterMessageBuilder extends CustomisableMessageBulder {
 
 		public EnterMessageBuilder(Integer indent, String indentText, String methodName, Log log, Object[] args) {
-			super(indent, indentText, methodName, log, args, stringUtils);
+			super(indent, indentText, methodName, log, args, logFormatter);
 		}
 
 		@Override
@@ -137,7 +137,7 @@ public class CustomisableMessageBuilderFactory implements MessageBuilderFactory 
 		private final boolean returnsNothing;
 
 		public MethodSuccessfulExitMessageBuilder(Integer indent, String indentText, String methodName, Log log, Object[] args, boolean returnsNothing, Object result) {
-			super(indent, indentText, methodName, log, args, stringUtils);
+			super(indent, indentText, methodName, log, args, logFormatter);
 			this.returnsNothing = returnsNothing;
 			this.result = result;
 		}
@@ -157,7 +157,7 @@ public class CustomisableMessageBuilderFactory implements MessageBuilderFactory 
 		@Override
 		protected void buildResult() {
 			if (isBuildingResultRequired()) {
-				getStringBuilder().append(stringUtils.toString(getLog().resultTemplate(), result));
+				getStringBuilder().append(logFormatter.toString(getLog().resultTemplate(), result));
 			}
 		}
 
@@ -172,7 +172,7 @@ public class CustomisableMessageBuilderFactory implements MessageBuilderFactory 
 		private String exceptionExitTemplate;
 
 		public ExceptionReturnMessageBuilder(Integer indent, String indentText, String methodName, Log log, Object[] args, Throwable throwable, String exceptionExitTemplate) {
-			super(indent, indentText, methodName, log, args, stringUtils);
+			super(indent, indentText, methodName, log, args, logFormatter);
 			this.throwable = throwable;
 			this.exceptionExitTemplate = exceptionExitTemplate;
 		}
@@ -190,7 +190,7 @@ public class CustomisableMessageBuilderFactory implements MessageBuilderFactory 
 		@Override
 		protected void buildResult() {
 			if (!exceptionExitTemplate.isEmpty()) {
-				getStringBuilder().append(stringUtils.toString(exceptionExitTemplate, throwable));
+				getStringBuilder().append(logFormatter.toString(exceptionExitTemplate, throwable));
 			}
 		}
 	}

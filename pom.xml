@@ -1,11 +1,13 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.sf.aspect4log</groupId>
 	<artifactId>aspect4log</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.2</version>
 	<inceptionYear>2013</inceptionYear>
 	<name>${project.artifactId}</name>
-	<parent><!-- it describes distribution management for snapshot and stage repository -->
+	<parent><!-- it describes distribution management for snapshot and stage 
+			repository -->
 		<groupId>org.sonatype.oss</groupId>
 		<artifactId>oss-parent</artifactId>
 		<version>7</version>
@@ -30,12 +32,14 @@
 	</issueManagement>
 	<scm>
 		<connection>scm:git:git://git.code.sf.net/p/aspect4log/code</connection>
-		<!-- mvn -Dusername=your_scm_username release:prepare is needed in case your OS username is different from SCM username -->
+		<!-- mvn -Dusername=your_scm_username release:prepare is needed in case 
+			your OS username is different from SCM username -->
 		<developerConnection>scm:git:ssh://git.code.sf.net/p/aspect4log/code</developerConnection>
 		<url>http://sourceforge.net/p/aspect4log/code/</url>
 	</scm>
 	<distributionManagement>
-		<!-- run before deploying site ssh -t yilativs,aspect4log@shell.sourceforge.net create -->
+		<!-- run before deploying site ssh -t yilativs,aspect4log@shell.sourceforge.net 
+			create -->
 		<site>
 			<id>sourceforge.net</id>
 			<url>scp://shell.sourceforge.net/home/project-web/aspect4log/htdocs</url>
@@ -67,13 +71,33 @@
 		<maven.compiler.source>1.6</maven.compiler.source>
 		<maven.compiler.target>1.6</maven.compiler.target>
 		<spring.version>4.0.4.RELEASE</spring.version>
-		<slf4j.version>1.7.5</slf4j.version>
+		<slf4j.version>1.7.7</slf4j.version>
 		<aspectj.version>1.6.12</aspectj.version>
 		<maven-pmd-plugin.configLocation>${project.basedir}/pmd.xml</maven-pmd-plugin.configLocation>
 	</properties>
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>aspectj-maven-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compile</goal>
+							<!-- <goal>test-compile</goal> -->
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+					<complianceLevel>1.7</complianceLevel>
+					<forceAjcCompile>true</forceAjcCompile>
+					<showWeaveInfo>true</showWeaveInfo>
+				</configuration>
+			</plugin>
 			<plugin><!-- needed for site pluging to accept scp urls -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
@@ -91,8 +115,10 @@
 				<artifactId>maven-release-plugin</artifactId>
 				<configuration>
 					<releaseProfiles>attach-sources,attach-javadoc,sign-artifacts</releaseProfiles>
-					<username>yilativs</username><!-- make sure that ssh key from current system is uploaded to sf.net -->
-					<!-- <pushChanges>false</pushChanges> needed till release plugin works without bugs -->
+					<username>yilativs</username><!-- make sure that ssh key from current 
+						system is uploaded to sf.net -->
+					<!-- <pushChanges>false</pushChanges> needed till release plugin works 
+						without bugs -->
 					<!--<tagNameFormat>@{project.version}</tagNameFormat> default is @{project.artifactId}-@{project.version} -->
 				</configuration>
 			</plugin>
@@ -148,11 +174,8 @@
 			<artifactId>jcl-over-slf4j</artifactId>
 			<version>${slf4j.version}</version>
 		</dependency>
-		<!-- <dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>${slf4j.version}</version>
-		</dependency> -->
+		<!-- <dependency> <groupId>org.slf4j</groupId> <artifactId>slf4j-log4j12</artifactId> 
+			<version>${slf4j.version}</version> </dependency> -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

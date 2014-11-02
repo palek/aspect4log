@@ -17,11 +17,13 @@
 
 package net.sf.aspect4log;
 
+import static net.sf.aspect4log.LogLevel.ERROR;
+import static net.sf.aspect4log.LogLevel.WARN;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import static net.sf.aspect4log.LogLevel.*;
 
 /**
  * 

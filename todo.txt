@@ -1,0 +1,3 @@
+decide on call or on execution apply the Aspect = decided to use execution (for excha like framewors will use ordering,see how it is done in AspectJ)
+handle static methods of annotated class without need of placing annotation
+handle constructors

@@ -11,6 +11,10 @@ import org.springframework.stereotype.Repository;
 @Log
 public class FooDao {
 
+	public FooDao(){
+		
+	}
+	
 	ArrayList<String> list = new ArrayList<String>();
 	
 	public void saveFoo(String foo) {

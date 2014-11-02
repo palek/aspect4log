@@ -25,14 +25,14 @@ public abstract class CustomisableMessageBulder implements MessageBuilder {
 	private final Log log;
 	private final Object[] args;
 	private final String indentText;
-	private StringUtils stringUtils;
+	private LogFormatter logFormatter;
 
-	public CustomisableMessageBulder(Integer indent, String indentText, String methodName, Log log, Object[] args, StringUtils stringUtils) {
+	public CustomisableMessageBulder(Integer indent, String indentText, String methodName, Log log, Object[] args, LogFormatter logFormatter) {
 		this.indent = indent;
 		this.indentText = indentText;
 		this.methodName = methodName;
 		this.log = log;
-		this.stringUtils = stringUtils;
+		this.logFormatter = logFormatter;
 		this.args = args.clone();
 	}
 
@@ -68,9 +68,9 @@ public abstract class CustomisableMessageBulder implements MessageBuilder {
 	protected void buildArguments() {
 		if (!log.argumentsTemplate().isEmpty()) {
 			if (Log.ARGUMENTS_DEFAULT_TEMPLATE.equals(log.argumentsTemplate())) {
-				stringBuilder.append(stringUtils.toString(args));
+				stringBuilder.append(logFormatter.toString(args));
 			} else {
-				stringBuilder.append(stringUtils.toString(log.argumentsTemplate(), args));
+				stringBuilder.append(logFormatter.toString(log.argumentsTemplate(), args));
 			}
 		}
 	}

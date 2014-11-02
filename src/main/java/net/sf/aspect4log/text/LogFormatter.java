@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
-public class StringUtils {
+public class LogFormatter {
 
 	public static final String ELEMENTS_DELITMETER = ", ";
 	public static final String MAP_KEY_VALUE_DELIMETER = "=";
