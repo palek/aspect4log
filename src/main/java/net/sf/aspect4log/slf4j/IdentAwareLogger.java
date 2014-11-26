@@ -13,105 +13,109 @@ public class IdentAwareLogger implements Logger {
 	public IdentAwareLogger(Logger logger) {
 		this.logger = logger;
 	}
+	
+	private static String buildIdent(){
+		return LogAspect.getLogFormatConfiguration().getMessageBuilderFactory().buildIdent();
+	}
 
 	@Override
 	public void debug(String s) {
-		logger.debug(s);
+		logger.debug(buildIdent()+s);
 	}
 
 	@Override
 	public void debug(String s, Object o) {
-		logger.debug(s, o);
+		logger.debug(buildIdent()+s, o);
 	}
 
 	@Override
 	public void debug(String s, Object... o) {
-		logger.debug(s, o);
+		logger.debug(buildIdent()+s, o);
 	}
 
 	@Override
 	public void debug(String s, Throwable o) {
-		logger.debug(s, o);
+		logger.debug(buildIdent()+s, o);
 	}
 
 	@Override
 	public void debug(Marker s, String o) {
-		logger.debug(s, o);
+		logger.debug(buildIdent()+s, o);
 	}
 
 	@Override
 	public void debug(String s, Object o, Object oo) {
-		logger.debug(s, o, oo);
+		logger.debug(buildIdent()+s, o, oo);
 	}
 
 	@Override
 	public void debug(Marker s, String o, Object oo) {
-		logger.debug(s, o, oo);
+		logger.debug(buildIdent()+s, o, oo);
 	}
 
 	@Override
 	public void debug(Marker s, String o, Object... oo) {
-		logger.debug(s, o, oo);
+		logger.debug(buildIdent()+s, o, oo);
 	}
 
 	@Override
 	public void debug(Marker s, String o, Throwable oo) {
-		logger.debug(s, o, oo);
+		logger.debug(buildIdent()+s, o, oo);
 	}
 
 	@Override
 	public void debug(Marker s, String o, Object a, Object oo) {
-		logger.debug(s, o, a, oo);
+		logger.debug(buildIdent()+s, o, a, oo);
 	}
 
 	@Override
 	public void error(String s) {
-		logger.error(s);
+		logger.error(buildIdent()+s);
 	}
 
 	@Override
 	public void error(String s, Object o) {
-		logger.error(s, o);
+		logger.error(buildIdent()+s, o);
 	}
 
 	@Override
 	public void error(String s, Object... o) {
-		logger.error(s, o);
+		logger.error(buildIdent()+s, o);
 	}
 
 	@Override
 	public void error(String s, Throwable o) {
-		logger.error(s, o);
+		logger.error(buildIdent()+s, o);
 	}
 
 	@Override
 	public void error(Marker s, String o) {
-		logger.error(s, o);
+		logger.error(buildIdent()+s, o);
 	}
 
 	@Override
 	public void error(String s, Object o, Object oo) {
-		logger.error(s, o, oo);
+		logger.error(buildIdent()+s, o, oo);
 	}
 
 	@Override
 	public void error(Marker s, String o, Object oo) {
-		logger.error(s, o, oo);
+		logger.error(buildIdent()+s, o, oo);
 	}
 
 	@Override
 	public void error(Marker s, String o, Object... oo) {
-		logger.error(s, o, oo);
+		logger.error(buildIdent()+s, o, oo);
 	}
 
 	@Override
 	public void error(Marker s, String o, Throwable oo) {
-		logger.error(s, o, oo);
+		logger.error(buildIdent()+s, o, oo);
 	}
 
 	@Override
 	public void error(Marker s, String o, Object a, Object oo) {
-		logger.error(s, o, a, oo);
+		logger.error(buildIdent()+s, o, a, oo);
 	}
 
 	@Override
@@ -121,52 +125,52 @@ public class IdentAwareLogger implements Logger {
 
 	@Override
 	public void info(String s) {
-		logger.info(s);
+		logger.info(buildIdent()+s);
 	}
 
 	@Override
 	public void info(String s, Object o) {
-		logger.info(s, o);
+		logger.info(buildIdent()+s, o);
 	}
 
 	@Override
 	public void info(String s, Object... o) {
-		logger.info(s, o);
+		logger.info(buildIdent()+s, o);
 	}
 
 	@Override
 	public void info(String s, Throwable o) {
-		logger.info(s, o);
+		logger.info(buildIdent()+s, o);
 	}
 
 	@Override
 	public void info(Marker s, String o) {
-		logger.info(s, o);
+		logger.info(buildIdent()+s, o);
 	}
 
 	@Override
 	public void info(String s, Object o, Object oo) {
-		logger.info(s, o, oo);
+		logger.info(buildIdent()+s, o, oo);
 	}
 
 	@Override
 	public void info(Marker s, String o, Object oo) {
-		logger.info(s, o, oo);
+		logger.info(buildIdent()+s, o, oo);
 	}
 
 	@Override
 	public void info(Marker s, String o, Object... oo) {
-		logger.info(s, o, oo);
+		logger.info(buildIdent()+s, o, oo);
 	}
 
 	@Override
 	public void info(Marker s, String o, Throwable oo) {
-		logger.info(s, o, oo);
+		logger.info(buildIdent()+s, o, oo);
 	}
 
 	@Override
 	public void info(Marker s, String o, Object a, Object oo) {
-		logger.info(s, o, a, oo);
+		logger.info(buildIdent()+s, o, a, oo);
 	}
 
 	@Override
@@ -221,102 +225,102 @@ public class IdentAwareLogger implements Logger {
 
 	@Override
 	public void trace(String s) {
-		logger.trace(s);
+		logger.trace(buildIdent()+s);
 	}
 
 	@Override
 	public void trace(String s, Object o) {
-		logger.trace(s, o);
+		logger.trace(buildIdent()+s, o);
 	}
 
 	@Override
 	public void trace(String s, Object... o) {
-		logger.trace(s, o);
+		logger.trace(buildIdent()+s, o);
 	}
 
 	@Override
 	public void trace(String s, Throwable o) {
-		logger.trace(s, o);
+		logger.trace(buildIdent()+s, o);
 	}
 
 	@Override
 	public void trace(Marker s, String o) {
-		logger.trace(s, o);
+		logger.trace(buildIdent()+s, o);
 	}
 
 	@Override
 	public void trace(String s, Object o, Object oo) {
-		logger.trace(s, o, oo);
+		logger.trace(buildIdent()+s, o, oo);
 	}
 
 	@Override
 	public void trace(Marker s, String o, Object oo) {
-		logger.trace(s, o, oo);
+		logger.trace(buildIdent()+s, o, oo);
 	}
 
 	@Override
 	public void trace(Marker s, String o, Object... oo) {
-		logger.trace(s, o, oo);
+		logger.trace(buildIdent()+s, o, oo);
 	}
 
 	@Override
 	public void trace(Marker s, String o, Throwable oo) {
-		logger.trace(s, o, oo);
+		logger.trace(buildIdent()+s, o, oo);
 	}
 
 	@Override
 	public void trace(Marker s, String o, Object a, Object oo) {
-		logger.trace(s, o, a, oo);
+		logger.trace(buildIdent()+s, o, a, oo);
 	}
 
 	@Override
 	public void warn(String s) {
-		logger.warn(s);
+		logger.warn(buildIdent()+s);
 	}
 
 	@Override
 	public void warn(String s, Object o) {
-		logger.warn(s, o);
+		logger.warn(buildIdent()+s, o);
 	}
 
 	@Override
 	public void warn(String s, Object... o) {
-		logger.warn(s, o);
+		logger.warn(buildIdent()+s, o);
 	}
 
 	@Override
 	public void warn(String s, Throwable o) {
-		logger.warn(s, o);
+		logger.warn(buildIdent()+s, o);
 	}
 
 	@Override
 	public void warn(Marker s, String o) {
-		logger.warn(s, o);
+		logger.warn(buildIdent()+s, o);
 	}
 
 	@Override
 	public void warn(String s, Object o, Object oo) {
-		logger.warn(s, o, oo);
+		logger.warn(buildIdent()+s, o, oo);
 	}
 
 	@Override
 	public void warn(Marker s, String o, Object oo) {
-		logger.warn(s, o, oo);
+		logger.warn(buildIdent()+s, o, oo);
 	}
 
 	@Override
 	public void warn(Marker s, String o, Object... oo) {
-		logger.warn(s, o, oo);
+		logger.warn(buildIdent()+s, o, oo);
 	}
 
 	@Override
 	public void warn(Marker s, String o, Throwable oo) {
-		logger.warn(s, o, oo);
+		logger.warn(buildIdent()+s, o, oo);
 	}
 
 	@Override
 	public void warn(Marker s, String o, Object a, Object oo) {
-		logger.warn(s, o, a, oo);
+		logger.warn(buildIdent()+s, o, a, oo);
 	}
 
 }

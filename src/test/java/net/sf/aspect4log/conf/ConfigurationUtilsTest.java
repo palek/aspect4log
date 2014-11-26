@@ -13,7 +13,6 @@ public class ConfigurationUtilsTest {
 
 		LogFormatConfiguration logFormatConfiguration = LogFormatConfigurationUtils.readConfiguration();
 		
-		Assert.assertEquals("\t", logFormatConfiguration.getIndentText());
 		Assert.assertEquals(CustomisableMessageBuilderFactory.class, logFormatConfiguration.getMessageBuilderFactory().getClass());
 	}
 }

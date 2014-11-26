@@ -38,39 +38,8 @@ import org.w3c.dom.Element;
 @XmlRootElement(name="aspect4logConfiguration")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class LogFormatConfiguration {
-
-	/**
-	 * 
-	 * @return specifies if indent should be used for methods called inside marked method. The default value is true.
-	 */
-
-	private boolean useIndent = true;
-
-	/**
-	 * @return a java.lang.String that represents text of Indent. The default value is 1 tab symbol.
-	 */
-
-	private String indentText = "\t";
-
+	
 	private MessageBuilderFactory messageBuilderFactory = new CustomisableMessageBuilderFactory();
-
-	public boolean isUseIndent() {
-		return useIndent;
-	}
-
-	@XmlElement
-	public void setUseIndent(boolean useIndent) {
-		this.useIndent = useIndent;
-	}
-
-	public String getIndentText() {
-		return indentText;
-	}
-
-	@XmlElement
-	public void setIndentText(String indentText) {
-		this.indentText = indentText;
-	}
 
 	@XmlTransient
 	public void setMessageBuilderFactory(MessageBuilderFactory messageBuilderFactory) {

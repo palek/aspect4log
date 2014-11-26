@@ -17,6 +17,7 @@
 package net.sf.aspect4log.text;
 
 import net.sf.aspect4log.Log;
+import net.sf.aspect4log.aspect.LogAspect;
 
 public class CustomisableMessageBuilderFactory implements MessageBuilderFactory {
 	public static final String METHOD_ENTER_SYMBOL = "↓";
@@ -30,6 +31,35 @@ public class CustomisableMessageBuilderFactory implements MessageBuilderFactory 
 	private String methodThrownExceptionExitSymbol = METHOD_THROWN_EXCEPTION_EXIT_SYMBOL;
 	private String returnedValueSeporator = RETURNED_VALUE_SEPORATOR;
 	private String thrownExceptionSeporator = THROWN_EXCEPTION_SEPORATOR;
+
+	/**
+	 * 
+	 * @return specifies if indent should be used for methods called inside marked method. The default value is true.
+	 */
+
+	private boolean useIndent = true;
+
+	/**
+	 * @return a java.lang.String that represents text of Indent. The default value is 1 tab symbol.
+	 */
+
+	private String indentText = "\t";
+
+	public boolean isUseIndent() {
+		return useIndent;
+	}
+
+	public void setUseIndent(boolean useIndent) {
+		this.useIndent = useIndent;
+	}
+
+	public String getIndentText() {
+		return indentText;
+	}
+
+	public void setIndentText(String indentText) {
+		this.indentText = indentText;
+	}
 
 	public void setElementsDelitmeter(String elementsDelitmeter) {
 		logFormatter.setElementsDelitmeter(elementsDelitmeter);
@@ -90,18 +120,18 @@ public class CustomisableMessageBuilderFactory implements MessageBuilderFactory 
 	private LogFormatter logFormatter = new LogFormatter();
 
 	@Override
-	public MessageBuilder createEnterMessageBuilder(Integer indent, String indentText, String methodName, Log log, Object[] args) {
-		return new EnterMessageBuilder(indent, indentText, methodName, log, args);
+	public MessageBuilder createEnterMessageBuilder(String methodName, Log log, Object[] args) {
+		return new EnterMessageBuilder(methodName, log, args);
 	}
 
 	@Override
-	public MessageBuilder createSuccessfulReturnMessageBuilder(Integer indent, String indentText, String methodName, Log log, Object[] args, boolean returnsNothing, Object result) {
-		return new MethodSuccessfulExitMessageBuilder(indent, indentText, methodName, log, args, returnsNothing, result);
+	public MessageBuilder createSuccessfulReturnMessageBuilder(String methodName, Log log, Object[] args, boolean returnsNothing, Object result) {
+		return new MethodSuccessfulExitMessageBuilder(methodName, log, args, returnsNothing, result);
 	}
 
 	@Override
-	public MessageBuilder createExceptionReturnMessageBuilder(Integer indent, String indentText, String methodName, Log log, Object[] args, Throwable throwable,String exceptionExitTemplate) {
-		return new ExceptionReturnMessageBuilder(indent, indentText, methodName, log, args, throwable,exceptionExitTemplate);
+	public MessageBuilder createExceptionReturnMessageBuilder(String methodName, Log log, Object[] args, Throwable throwable, String exceptionExitTemplate) {
+		return new ExceptionReturnMessageBuilder(methodName, log, args, throwable, exceptionExitTemplate);
 	}
 
 	private final class SimpleMdcMessageBuilder implements MessageBuilder {
@@ -121,8 +151,8 @@ public class CustomisableMessageBuilderFactory implements MessageBuilderFactory 
 
 	private class EnterMessageBuilder extends CustomisableMessageBulder {
 
-		public EnterMessageBuilder(Integer indent, String indentText, String methodName, Log log, Object[] args) {
-			super(indent, indentText, methodName, log, args, logFormatter);
+		public EnterMessageBuilder(String methodName, Log log, Object[] args) {
+			super(methodName, log, args, logFormatter);
 		}
 
 		@Override
@@ -136,8 +166,8 @@ public class CustomisableMessageBuilderFactory implements MessageBuilderFactory 
 		private final Object result;
 		private final boolean returnsNothing;
 
-		public MethodSuccessfulExitMessageBuilder(Integer indent, String indentText, String methodName, Log log, Object[] args, boolean returnsNothing, Object result) {
-			super(indent, indentText, methodName, log, args, logFormatter);
+		public MethodSuccessfulExitMessageBuilder(String methodName, Log log, Object[] args, boolean returnsNothing, Object result) {
+			super(methodName, log, args, logFormatter);
 			this.returnsNothing = returnsNothing;
 			this.result = result;
 		}
@@ -171,8 +201,8 @@ public class CustomisableMessageBuilderFactory implements MessageBuilderFactory 
 		private final Throwable throwable;
 		private String exceptionExitTemplate;
 
-		public ExceptionReturnMessageBuilder(Integer indent, String indentText, String methodName, Log log, Object[] args, Throwable throwable, String exceptionExitTemplate) {
-			super(indent, indentText, methodName, log, args, logFormatter);
+		public ExceptionReturnMessageBuilder(String methodName, Log log, Object[] args, Throwable throwable, String exceptionExitTemplate) {
+			super(methodName, log, args, logFormatter);
 			this.throwable = throwable;
 			this.exceptionExitTemplate = exceptionExitTemplate;
 		}
@@ -198,6 +228,90 @@ public class CustomisableMessageBuilderFactory implements MessageBuilderFactory 
 	@Override
 	public MessageBuilder createMdcTemplate(final Log log, final Object[] args) {
 		return new SimpleMdcMessageBuilder(log, args);
+	}
+
+	private abstract class CustomisableMessageBulder implements MessageBuilder {
+		private final StringBuilder stringBuilder = new StringBuilder();
+		private final String methodName;
+		private final Log log;
+		private final Object[] args;
+		private LogFormatter logFormatter;
+
+		public CustomisableMessageBulder(String methodName, Log log, Object[] args, LogFormatter logFormatter) {
+			this.methodName = methodName;
+			this.log = log;
+			this.logFormatter = logFormatter;
+			this.args = args.clone();
+		}
+
+		@Override
+		public final String build() {
+			buildDirectionSymbol();
+			buildIndent();
+			buildMethodName();
+			buildMethodOpenBracket();
+			buildArguments();
+			buildMethodClosedBracket();
+			buildResultDelimeter();
+			buildResult();
+			return stringBuilder.toString();
+		}
+
+		protected void buildIndent() {
+			for (int i = 0; i < LogAspect.getThreadLocalIdent().intValue(); i++) {
+				stringBuilder.append(indentText);
+			}
+		}
+
+		abstract protected void buildDirectionSymbol();
+
+		protected void buildMethodName() {
+			stringBuilder.append(methodName);
+		}
+
+		protected void buildMethodOpenBracket() {
+			stringBuilder.append("(");
+		}
+
+		protected void buildArguments() {
+			if (!log.argumentsTemplate().isEmpty()) {
+				if (Log.ARGUMENTS_DEFAULT_TEMPLATE.equals(log.argumentsTemplate())) {
+					stringBuilder.append(logFormatter.toString(args));
+				} else {
+					stringBuilder.append(logFormatter.toString(log.argumentsTemplate(), args));
+				}
+			}
+		}
+
+		protected void buildMethodClosedBracket() {
+			stringBuilder.append(")");
+		}
+
+		protected void buildResultDelimeter() {
+			// there is no result by default
+		}
+
+		protected void buildResult() {
+			// there is no result by default
+		}
+
+		protected StringBuilder getStringBuilder() {
+			return stringBuilder;
+		}
+
+		protected Log getLog() {
+			return log;
+		}
+
+	}
+
+	@Override
+	public String buildIdent() {
+		StringBuilder stringBuilder = new StringBuilder();
+		for (int i = 0; i < LogAspect.getThreadLocalIdent().intValue(); i++) {
+			stringBuilder.append(indentText);
+		}
+		return stringBuilder.toString();
 	}
 
 }

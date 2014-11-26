@@ -231,6 +231,7 @@ public class LogFormatter {
 	private void addIterrableBrackets(StringBuilder stringBuilder, String string) {
 		addBrackets(stringBuilder, iterableBeginsBracket, string, iterableEndsBracket);
 	}
+	
 
 // TODO consider implementing cache on WeakHashReferences (yes, because class objects are rare to be gc's it's ok to use WeakHashReferences
 //	private ConcurrentMap<Class<?>, Boolean> classDefaultToStringOverridenMap = new ConcurrentHashMap<Class<?>, Boolean>();

@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <aspect4logConfiguration>
-	<!-- default is true -->
-	<useIndent>true</useIndent>
-	<!--default is \t -->
-	<indentText>	</indentText>
+	
+
+	
 	
 	<messageBuilderFactoryConfiguration class="net.sf.aspect4log.text.CustomisableMessageBuilderFactory">
+			<!-- default is true -->
+			<useIndent>true</useIndent>
+			<!--default is \t -->
+			<indentText>	</indentText>
 			<methodEnterSymbol>↓</methodEnterSymbol>
 			<methodSuccessfulExitSymbol>↑</methodSuccessfulExitSymbol>
 			<methodThrownExceptionExitSymbol>⇑</methodThrownExceptionExitSymbol>

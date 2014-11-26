@@ -1,3 +1,21 @@
+remove static initialization handling
+consider not building indent if the log is not entrance is not visible in log {
+	possible solution is not to call increaseIndent if log level is disabled 
+	but what to do if it exit level is higher(we will call decrease when it is not needed - which is wrong)
+	or enter level is lower (we will call decrease when it is not needed - which is wrong)
+	from all of the above it seems we need to store if we increased indent for this particular method/constructor call
+	
+}
 decide on call or on execution apply the Aspect = decided to use execution (for excha like framewors will use ordering,see how it is done in AspectJ)
 handle static methods of annotated class without need of placing annotation
 handle constructors
+
+let people replace LoggerFactory on
+
+provide pointcut solution for third party libs to use LogAspect for alraedy compiled libs e.g spring{
+e.g
+	@Log(...)
+	myPointCutHitsFirstPartyLibs{}
+in this case LogAspect is supposed to 
+
+} 

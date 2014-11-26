@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <aspect4logConfiguration>
-	<!-- default is true -->
-	<useIndent>true</useIndent>
-	<!--default is \t -->
-	<indentText>	</indentText>
-	
+
+
 	<messageBuilderFactoryConfiguration class="net.sf.aspect4log.text.CustomisableMessageBuilderFactory">
-			<methodEnterSymbol> &gt; </methodEnterSymbol>
-			<methodSuccessfulExitSymbol> &lt; </methodSuccessfulExitSymbol>
-			<methodThrownExceptionExitSymbol> &lt; </methodThrownExceptionExitSymbol>
-			<returnedValueSeporator> = </returnedValueSeporator>
-			<thrownExceptionSeporator> => </thrownExceptionSeporator>
-			
-			<elementsDelitmeter>, </elementsDelitmeter>
-			<mapKeyValueDelimeter> : </mapKeyValueDelimeter>
-			<arrayBeginsBracket>{</arrayBeginsBracket>
-			<arrayEndsBracket>}</arrayEndsBracket>
-			<iterableBeginsBracket>{</iterableBeginsBracket>
-			<iterableEndsBracket>}</iterableEndsBracket>
-			
-			
+		<!-- default is true -->
+		<useIndent>true</useIndent>
+		<!--default is \t -->
+		<indentText>		</indentText>
+		<methodEnterSymbol> &gt; </methodEnterSymbol>
+		<methodSuccessfulExitSymbol> &lt; </methodSuccessfulExitSymbol>
+		<methodThrownExceptionExitSymbol> &lt; </methodThrownExceptionExitSymbol>
+		<returnedValueSeporator> = </returnedValueSeporator>
+		<thrownExceptionSeporator> => </thrownExceptionSeporator>
+
+		<elementsDelitmeter>, </elementsDelitmeter>
+		<mapKeyValueDelimeter> : </mapKeyValueDelimeter>
+		<arrayBeginsBracket>{</arrayBeginsBracket>
+		<arrayEndsBracket>}</arrayEndsBracket>
+		<iterableBeginsBracket>{</iterableBeginsBracket>
+		<iterableEndsBracket>}</iterableEndsBracket>
+
+
 	</messageBuilderFactoryConfiguration>
-	
+
 </aspect4logConfiguration>

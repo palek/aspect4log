@@ -33,13 +33,13 @@ import java.lang.annotation.Target;
  * 
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.TYPE, ElementType.METHOD })
+@Target({ ElementType.TYPE, ElementType.METHOD,ElementType.CONSTRUCTOR })
 public @interface Log {
 	public static final String ARGUMENTS_DEFAULT_TEMPLATE = "${args}";
 	public static final String RESULT_DEFAULT_TEMPLATE = "${result}";
 	
 
-	LogLevel enterLevel() default LogLevel.INFO;
+	LogLevel enterLevel() default LogLevel.DEBUG;
 
 	/**
 	 * 

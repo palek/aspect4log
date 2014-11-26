@@ -72,7 +72,7 @@
 		<maven.compiler.target>1.6</maven.compiler.target>
 		<spring.version>4.0.4.RELEASE</spring.version>
 		<slf4j.version>1.7.7</slf4j.version>
-		<aspectj.version>1.6.12</aspectj.version>
+		<aspectj.version>1.8.2</aspectj.version>
 		<maven-pmd-plugin.configLocation>${project.basedir}/pmd.xml</maven-pmd-plugin.configLocation>
 	</properties>
 
@@ -143,9 +143,16 @@
 		</dependencies>
 	</dependencyManagement>
 	<dependencies>
-		<dependency>
+		
+		<!-- <dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjweaver</artifactId>
+			<version>${aspectj.version}</version>
+		</dependency> -->
+		
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
 			<version>${aspectj.version}</version>
 		</dependency>
 		<dependency>
