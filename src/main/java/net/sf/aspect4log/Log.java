@@ -50,7 +50,9 @@ public @interface Log {
 	LogLevel exitLevel() default LogLevel.DEBUG;
 
 	/**
-	 * defines how exit on exception is logged
+	 * defines how exit on different exceptions is logged.
+	 * For each exception it is possible to specify 
+	 * by default all runtime exceptions print a stack trace, all checked exception do not print a stack trace.  
 	 * @return
 	 */
 	LogException[] logExceptions() default { @LogException(level = ERROR, exceptions = { RuntimeException.class }, printStackTrace = true), @LogException(level = WARN, exceptions = { Exception.class }, printStackTrace = false) };
