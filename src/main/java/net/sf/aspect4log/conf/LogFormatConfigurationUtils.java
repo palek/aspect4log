@@ -22,7 +22,8 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
 public class LogFormatConfigurationUtils {
-	public static final String DEFAULT_CONFIG_FILE = "aspect4log.xml";
+	public static final String CONFIG_FILE = "aspect4log.xml";
+	public static final String TEST_CONFIG_FILE = "aspect4log-test.xml";
 
 	public static LogFormatConfiguration readConfiguration(URL url) throws LogFormatConfigurationException {
 		try {
@@ -35,7 +36,10 @@ public class LogFormatConfigurationUtils {
 	}
 
 	public static LogFormatConfiguration readConfiguration() throws LogFormatConfigurationException {
-		URL url = LogFormatConfigurationUtils.class.getClassLoader().getResource(DEFAULT_CONFIG_FILE);
+		URL url = LogFormatConfigurationUtils.class.getClassLoader().getResource(TEST_CONFIG_FILE);
+		if (url == null) {
+			url = LogFormatConfigurationUtils.class.getClassLoader().getResource(CONFIG_FILE);
+		}
 		if (url == null) {
 			return new LogFormatConfiguration();
 		}else{

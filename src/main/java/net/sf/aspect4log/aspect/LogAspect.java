@@ -87,27 +87,26 @@ public class LogAspect {
 
 		boolean isConstractorCall = "constructor-execution".equals(pjp.getStaticPart().getKind());
 
-		
 		String declaringClass = pjp.getSignature().getDeclaringTypeName();
-		String methodName =  isConstractorCall ? pjp.getSignature().getDeclaringType().getSimpleName(): pjp.getSignature().getName();
+		String methodName = isConstractorCall ? pjp.getSignature().getDeclaringType().getSimpleName() : pjp.getSignature().getName();
+		Logger logger = LoggerFactory.getLogger(declaringClass);
 		try {
 			increaseIndent(log);
 			setMDC(log, pjp.getArgs());
 
 			MessageBuilder enterMessageBuilder = factory.createEnterMessageBuilder(methodName, log, pjp.getArgs());
-			log(declaringClass, log.enterLevel(), enterMessageBuilder, null);
+			log(logger, log.enterLevel(), enterMessageBuilder, null);
 			Object result = pjp.proceed();
 			Class<?> returnClass = null;
 			boolean returnsNothing = true;
-			if(isConstractorCall){
-				returnsNothing=false;
-			}else{
+			if (isConstractorCall) {
+				returnsNothing = false;
+			} else {
 				returnClass = ((MethodSignature) pjp.getSignature()).getReturnType();
 				returnsNothing = Void.TYPE.equals(returnClass);
 			}
-			MessageBuilder successfulReturnMessageBuilder = factory
-					.createSuccessfulReturnMessageBuilder(methodName, log, pjp.getArgs(), returnsNothing, result);
-			log(declaringClass, log.exitLevel(), successfulReturnMessageBuilder, null);
+			MessageBuilder messageBuilder = factory.createSuccessfulReturnMessageBuilder(methodName, log, pjp.getArgs(), returnsNothing, result);
+			log(logger, log.exitLevel(), messageBuilder, null);
 			return result;
 		} catch (Throwable e) {
 			LogLevel logLevel = LogLevel.ERROR;
@@ -123,8 +122,8 @@ public class LogAspect {
 					}
 				}
 			}
-			MessageBuilder exceptionReturnMessageBuilder = factory.createExceptionReturnMessageBuilder(methodName, log, pjp.getArgs(), e, template);
-			log(declaringClass, logLevel, exceptionReturnMessageBuilder, throwable);
+			MessageBuilder messageBuilder = factory.createExceptionReturnMessageBuilder(methodName, log, pjp.getArgs(), e, template);
+			log(logger, logLevel, messageBuilder, throwable);
 			throw e;
 		} finally {
 			decreaseIndent(log);
@@ -161,8 +160,7 @@ public class LogAspect {
 		}
 	}
 
-	private void log(String clazz, LogLevel level, MessageBuilder messageBuilder, Throwable throable) {
-		Logger logger = LoggerFactory.getLogger(clazz);
+	private void log(Logger logger, LogLevel level, MessageBuilder messageBuilder, Throwable throable) {
 		switch (level) {
 		case TRACE:
 			if (logger.isTraceEnabled()) {

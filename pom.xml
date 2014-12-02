@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.sf.aspect4log</groupId>
 	<artifactId>aspect4log</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.3</version>
 	<inceptionYear>2013</inceptionYear>
 	<name>${project.artifactId}</name>
 	<parent><!-- it describes distribution management for snapshot and stage 
@@ -94,7 +94,6 @@
 					<source>${maven.compiler.source}</source>
 					<target>${maven.compiler.target}</target>
 					<complianceLevel>1.6</complianceLevel>
-					<forceAjcCompile>true</forceAjcCompile>
 					<showWeaveInfo>true</showWeaveInfo>
 				</configuration>
 			</plugin>
