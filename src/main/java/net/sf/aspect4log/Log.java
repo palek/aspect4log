@@ -17,8 +17,6 @@
 
 package net.sf.aspect4log;
 
-import static net.sf.aspect4log.LogLevel.ERROR;
-import static net.sf.aspect4log.LogLevel.WARN;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -35,11 +33,47 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.TYPE, ElementType.METHOD,ElementType.CONSTRUCTOR })
 public @interface Log {
+	
+	public enum Level {
+		TRACE, DEBUG, INFO, WARN, ERROR
+	}
+	
+	/**
+	 *  Allows to specify {@link Level} and exceptionTemplate to apply for a given group of exceptions.
+	 */
+	@Target(ElementType.ANNOTATION_TYPE )
+	public @interface Exceptions {
+		public static final String EXCEPTION_DEFAULT_TEMPLATE = "${exception}";
+		
+		/**
+		 * 
+		 * @return {@link Level} to apply for a given group of exceptions
+		 */
+		Level level() default Level.ERROR;
+
+		/**
+		 * A group of exceptions.
+		 * @return
+		 */
+		Class<? extends Throwable>[] exceptions() default { Exception.class };
+
+		/**
+		 * @return true if printing stack trace is needed
+		 */
+		boolean stackTrace() default true;
+
+		/**
+		 * default value is $exception
+		 * @return $exception
+		 */
+		String template() default EXCEPTION_DEFAULT_TEMPLATE;
+	}
+	
 	public static final String ARGUMENTS_DEFAULT_TEMPLATE = "${args}";
 	public static final String RESULT_DEFAULT_TEMPLATE = "${result}";
 	
 
-	LogLevel enterLevel() default LogLevel.DEBUG;
+	Level enterLevel() default Level.DEBUG;
 
 	/**
 	 * 
@@ -47,7 +81,7 @@ public @interface Log {
 	 * 
 	 *         WARNING: making exitLevel than enterLevel can make the log hard to read
 	 */
-	LogLevel exitLevel() default LogLevel.DEBUG;
+	Level exitLevel() default Level.DEBUG;
 
 	/**
 	 * defines how exit on different exceptions is logged.
@@ -55,7 +89,7 @@ public @interface Log {
 	 * by default all runtime exceptions print a stack trace, all checked exception do not print a stack trace.  
 	 * @return
 	 */
-	LogException[] logExceptions() default { @LogException(level = ERROR, exceptions = { RuntimeException.class }, printStackTrace = true), @LogException(level = WARN, exceptions = { Exception.class }, printStackTrace = false) };
+	Exceptions[] on() default { @Exceptions(level = Level.ERROR, exceptions = { RuntimeException.class }, stackTrace = true), @Exceptions(level = Level.WARN, exceptions = { Exception.class }, stackTrace = false) };
 
 	String argumentsTemplate() default ARGUMENTS_DEFAULT_TEMPLATE;
 

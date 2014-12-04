@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.sf.aspect4log</groupId>
 	<artifactId>aspect4log</artifactId>
-	<version>1.0.3</version>
+	<version>1.0.4</version>
 	<inceptionYear>2013</inceptionYear>
 	<name>${project.artifactId}</name>
 	<parent><!-- it describes distribution management for snapshot and stage 
@@ -71,7 +71,7 @@
 		<maven.compiler.source>1.6</maven.compiler.source>
 		<maven.compiler.target>1.6</maven.compiler.target>
 		<spring.version>4.0.4.RELEASE</spring.version>
-		<slf4j.version>1.7.7</slf4j.version>
+		<slf4j.version>1.7.6</slf4j.version>
 		<aspectj.version>1.8.2</aspectj.version>
 		<maven-pmd-plugin.configLocation>${project.basedir}/pmd.xml</maven-pmd-plugin.configLocation>
 	</properties>

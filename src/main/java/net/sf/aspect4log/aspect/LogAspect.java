@@ -17,8 +17,7 @@
 package net.sf.aspect4log.aspect;
 
 import net.sf.aspect4log.Log;
-import net.sf.aspect4log.LogException;
-import net.sf.aspect4log.LogLevel;
+import net.sf.aspect4log.Log.Level;
 import net.sf.aspect4log.conf.LogFormatConfiguration;
 import net.sf.aspect4log.conf.LogFormatConfigurationUtils;
 import net.sf.aspect4log.text.MessageBuilder;
@@ -67,13 +66,15 @@ public class LogAspect {
 	 */
 	private static final ThreadLocal<Integer> thraedLocalIndent = new ThreadLocal<Integer>();
 
-	@Around("(execution(!@Log *(@Log *).*(..))|| execution(!@Log *.new(..)))  && @within(log)")
-	public Object logAnnotedClassExecution(ProceedingJoinPoint pjp, Log log) throws Throwable {
+//	@Around("execution(!@Log *(@Log *).*(..)) && @target(log)")
+	@Around("(execution(!@net.sf.aspect4log.Log *(@net.sf.aspect4log.Log *).*(..))|| execution(!@net.sf.aspect4log.Log *.new(..)))  && @within(log)")
+	public Object logNotAnnotatedMethondsInAnnotatedClasses(ProceedingJoinPoint pjp, Log log) throws Throwable {
 		return log(pjp, log);
 	}
 
-	@Around("(execution(@Log *.new(..)) || execution(@Log * *.*(..)) ) && @annotation(log)")
-	public Object logAnnotedMethodExecution(ProceedingJoinPoint pjp, Log log) throws Throwable {
+	@Around("(execution(@net.sf.aspect4log.Log *.new(..)) || execution(@net.sf.aspect4log.Log * *.*(..)) ) && @annotation(log)")
+//	@Around("@annotation(log)")
+	public Object logAnnotatedMethods(ProceedingJoinPoint pjp, Log log) throws Throwable {
 		return log(pjp, log);
 	}
 
@@ -109,21 +110,21 @@ public class LogAspect {
 			log(logger, log.exitLevel(), messageBuilder, null);
 			return result;
 		} catch (Throwable e) {
-			LogLevel logLevel = LogLevel.ERROR;
+			Level level = Level.ERROR;
 			Throwable throwable = e;
-			String template = LogException.EXCEPTION_DEFAULT_TEMPLATE;
-			exceptionExitSearchLoop: for (LogException logException : log.logExceptions()) {
-				for (Class<? extends Throwable> t : logException.exceptions()) {
+			String template = Log.Exceptions.EXCEPTION_DEFAULT_TEMPLATE;
+			exceptionExitSearchLoop: for (Log.Exceptions exceptions : log.on()) {
+				for (Class<? extends Throwable> t : exceptions.exceptions()) {
 					if (t.isAssignableFrom(e.getClass())) {
-						logLevel = logException.level();
-						throwable = logException.printStackTrace() ? e : null;
-						template = logException.exceptionTemplate();
+						level = exceptions.level();
+						throwable = exceptions.stackTrace() ? e : null;
+						template = exceptions.template();
 						break exceptionExitSearchLoop;
 					}
 				}
 			}
 			MessageBuilder messageBuilder = factory.createExceptionReturnMessageBuilder(methodName, log, pjp.getArgs(), e, template);
-			log(logger, logLevel, messageBuilder, throwable);
+			log(logger, level, messageBuilder, throwable);
 			throw e;
 		} finally {
 			decreaseIndent(log);
@@ -160,7 +161,7 @@ public class LogAspect {
 		}
 	}
 
-	private void log(Logger logger, LogLevel level, MessageBuilder messageBuilder, Throwable throable) {
+	private void log(Logger logger, Level level, MessageBuilder messageBuilder, Throwable throable) {
 		switch (level) {
 		case TRACE:
 			if (logger.isTraceEnabled()) {

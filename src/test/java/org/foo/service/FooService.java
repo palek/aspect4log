@@ -1,12 +1,12 @@
 package org.foo.service;
 
-import static net.sf.aspect4log.LogLevel.DEBUG;
-import static net.sf.aspect4log.LogLevel.INFO;
+import static net.sf.aspect4log.Log.Level.DEBUG;
+import static net.sf.aspect4log.Log.Level.INFO;
 
 import java.util.List;
 
 import net.sf.aspect4log.Log;
-import net.sf.aspect4log.LogException;
+import net.sf.aspect4log.Log.Exceptions;
 
 import org.foo.dao.FooDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,7 @@ public class FooService {
 		return fooDao.findFoo();
 	}
 
-	@Log(argumentsTemplate="args were: ${args[0]}", logExceptions=@LogException(exceptions=IllegalArgumentException.class,printStackTrace=false,exceptionTemplate="was thrown ${exception}"))
+	@Log(on=@Exceptions(exceptions=IllegalArgumentException.class,stackTrace=false,template="was thrown ${exception}"))
 	public void saveFoo(String foo) {
 		if (isFoo(foo)) {
 			fooDao.saveFoo(foo);
