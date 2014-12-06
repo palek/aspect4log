@@ -41,6 +41,15 @@ import org.slf4j.MDC;
 @Aspect
 public class LogAspect {
 
+	private static final LogAspect INSTANCE = new LogAspect();
+
+	/**
+	 * @return instance of {@link LogAspect}
+	 */
+	public static LogAspect aspectOf() {
+		return INSTANCE;
+	}
+
 	/*
 	 * LogFormatConfiguration can be only one per application
 	 */
