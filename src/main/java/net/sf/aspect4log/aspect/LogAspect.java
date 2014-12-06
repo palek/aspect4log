@@ -54,6 +54,11 @@ public class LogAspect {
 		logFormatConfiguration = LogFormatConfigurationUtils.readConfiguration();
 	}
 
+	/**
+	 * An alternative LogFormatConfiguration can be used in spring aop
+	 * 
+	 * @param logFormatConfiguration
+	 */
 	public LogAspect(LogFormatConfiguration logFormatConfiguration) {
 		if (logFormatConfiguration == null) {
 			throw new NullPointerException();
@@ -66,14 +71,14 @@ public class LogAspect {
 	 */
 	private static final ThreadLocal<Integer> thraedLocalIndent = new ThreadLocal<Integer>();
 
-//	@Around("execution(!@Log *(@Log *).*(..)) && @target(log)")
+	// @Around("execution(!@Log *(@Log *).*(..)) && @target(log)")
 	@Around("(execution(!@net.sf.aspect4log.Log *(@net.sf.aspect4log.Log *).*(..))|| execution(!@net.sf.aspect4log.Log *.new(..)))  && @within(log)")
 	public Object logNotAnnotatedMethondsInAnnotatedClasses(ProceedingJoinPoint pjp, Log log) throws Throwable {
 		return log(pjp, log);
 	}
 
+	// @Around("@annotation(log)")
 	@Around("(execution(@net.sf.aspect4log.Log *.new(..)) || execution(@net.sf.aspect4log.Log * *.*(..)) ) && @annotation(log)")
-//	@Around("@annotation(log)")
 	public Object logAnnotatedMethods(ProceedingJoinPoint pjp, Log log) throws Throwable {
 		return log(pjp, log);
 	}
@@ -146,18 +151,22 @@ public class LogAspect {
 	}
 
 	private void increaseIndent(Log log) {
-		if (thraedLocalIndent.get() == null) {
-			thraedLocalIndent.set(0);
-		} else if (thraedLocalIndent.get() != null) {
-			thraedLocalIndent.set(thraedLocalIndent.get() + 1);
+		if (log.indent()) {
+			if (thraedLocalIndent.get() == null) {
+				thraedLocalIndent.set(0);
+			} else if (thraedLocalIndent.get() != null) {
+				thraedLocalIndent.set(thraedLocalIndent.get() + 1);
+			}
 		}
 	}
 
 	private void decreaseIndent(Log log) {
-		if (thraedLocalIndent.get() == 0) {
-			thraedLocalIndent.remove();
-		} else {
-			thraedLocalIndent.set(thraedLocalIndent.get() - 1);
+		if (log.indent()) {
+			if (thraedLocalIndent.get() == 0) {
+				thraedLocalIndent.remove();
+			} else {
+				thraedLocalIndent.set(thraedLocalIndent.get() - 1);
+			}
 		}
 	}
 

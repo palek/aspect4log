@@ -19,3 +19,5 @@ e.g
 in this case LogAspect is supposed to 
 
 } 
+
+consider indent disabling in annotation, to avoid problems in recursion

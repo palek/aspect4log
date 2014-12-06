@@ -5,7 +5,7 @@
 		<!-- default is true -->
 		<useIndent>true</useIndent>
 		<!--default is \t -->
-		<indentText>		</indentText>
+		<indentText>	</indentText>
 		<methodEnterSymbol> &gt; </methodEnterSymbol>
 		<methodSuccessfulExitSymbol> &lt; </methodSuccessfulExitSymbol>
 		<methodThrownExceptionExitSymbol> &lt; </methodThrownExceptionExitSymbol>

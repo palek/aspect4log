@@ -17,7 +17,6 @@
 
 package net.sf.aspect4log;
 
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -31,20 +30,20 @@ import java.lang.annotation.Target;
  * 
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.TYPE, ElementType.METHOD,ElementType.CONSTRUCTOR })
+@Target({ ElementType.TYPE, ElementType.METHOD, ElementType.CONSTRUCTOR })
 public @interface Log {
-	
+
 	public enum Level {
-		TRACE, DEBUG, INFO, WARN, ERROR
+		NONE, TRACE, DEBUG, INFO, WARN, ERROR
 	}
-	
+
 	/**
-	 *  Allows to specify {@link Level} and exceptionTemplate to apply for a given group of exceptions.
+	 * Allows to specify {@link Level} and exceptionTemplate to apply for a given group of exceptions.
 	 */
-	@Target(ElementType.ANNOTATION_TYPE )
+	@Target(ElementType.ANNOTATION_TYPE)
 	public @interface Exceptions {
 		public static final String EXCEPTION_DEFAULT_TEMPLATE = "${exception}";
-		
+
 		/**
 		 * 
 		 * @return {@link Level} to apply for a given group of exceptions
@@ -53,6 +52,7 @@ public @interface Log {
 
 		/**
 		 * A group of exceptions.
+		 * 
 		 * @return
 		 */
 		Class<? extends Throwable>[] exceptions() default { Exception.class };
@@ -64,32 +64,33 @@ public @interface Log {
 
 		/**
 		 * default value is $exception
+		 * 
 		 * @return $exception
 		 */
 		String template() default EXCEPTION_DEFAULT_TEMPLATE;
 	}
-	
+
 	public static final String ARGUMENTS_DEFAULT_TEMPLATE = "${args}";
 	public static final String RESULT_DEFAULT_TEMPLATE = "${result}";
-	
 
+	/**
+	 * @return {@link Level} to use on method enter
+	 */
 	Level enterLevel() default Level.DEBUG;
 
 	/**
 	 * 
-	 * @return
+	 * @return {@link Level} to use on successful method exit
 	 * 
-	 *         WARNING: making exitLevel than enterLevel can make the log hard to read
+	 *         WARNING: making exitLevel smaller than enterLevel can make the log hard to read
 	 */
 	Level exitLevel() default Level.DEBUG;
 
 	/**
-	 * defines how exit on different exceptions is logged.
-	 * For each exception it is possible to specify 
-	 * by default all runtime exceptions print a stack trace, all checked exception do not print a stack trace.  
-	 * @return
+	 * @return an array of {@link Exceptions} that defines how exit on different exceptions is logged. For each exception it is possible to specify by default all runtime exceptions print a stack trace, all checked exception do not print a stack trace.
 	 */
-	Exceptions[] on() default { @Exceptions(level = Level.ERROR, exceptions = { RuntimeException.class }, stackTrace = true), @Exceptions(level = Level.WARN, exceptions = { Exception.class }, stackTrace = false) };
+	Exceptions[] on() default { @Exceptions(level = Level.ERROR, exceptions = { RuntimeException.class }, stackTrace = true),
+			@Exceptions(level = Level.WARN, exceptions = { Exception.class }, stackTrace = false) };
 
 	String argumentsTemplate() default ARGUMENTS_DEFAULT_TEMPLATE;
 
@@ -100,8 +101,18 @@ public @interface Log {
 	String resultTemplate() default RESULT_DEFAULT_TEMPLATE;
 
 	/**
+	 * @return true if indent is needed, returns false otherwise.
+	 * 
+	 *         NOTE: You may consider not to use indent in case the method level in stack trace will be too high, or in case you log recursive method. 
+	 */
+	boolean indent() default true;
+
+	/**
 	 * 
 	 * @return if specified will be set as MDC key.
+	 * 
+	 * 		NOTE: The typical use case for mdc key is identification method (e.g. in a filter). The typical key will be user's login.
+	 * 
 	 */
 	String mdcKey() default "";
 

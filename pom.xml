@@ -72,13 +72,13 @@
 		<maven.compiler.target>1.6</maven.compiler.target>
 		<spring.version>4.0.4.RELEASE</spring.version>
 		<slf4j.version>1.7.6</slf4j.version>
-		<aspectj.version>1.8.2</aspectj.version>
+		<aspectj.version>1.8.3</aspectj.version>
 		<maven-pmd-plugin.configLocation>${project.basedir}/pmd.xml</maven-pmd-plugin.configLocation>
 	</properties>
 
 	<build>
 		<plugins>
-			<plugin>
+			<!-- <plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>aspectj-maven-plugin</artifactId>
 				<version>1.7</version>
@@ -86,7 +86,6 @@
 					<execution>
 						<goals>
 							<goal>compile</goal>
-							<!-- <goal>test-compile</goal> -->
 						</goals>
 					</execution>
 				</executions>
@@ -96,7 +95,7 @@
 					<complianceLevel>1.6</complianceLevel>
 					<showWeaveInfo>true</showWeaveInfo>
 				</configuration>
-			</plugin>
+			</plugin> -->
 			<plugin><!-- needed for site pluging to accept scp urls -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
@@ -143,11 +142,12 @@
 	</dependencyManagement>
 	<dependencies>
 		
-		<!-- <dependency>
+		 <dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjweaver</artifactId>
 			<version>${aspectj.version}</version>
-		</dependency> -->
+			<scope>test</scope>
+		</dependency> 
 		
 		<dependency>
 			<groupId>org.aspectj</groupId>
