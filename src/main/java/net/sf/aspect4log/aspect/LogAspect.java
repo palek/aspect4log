@@ -53,27 +53,12 @@ public class LogAspect {
 	/*
 	 * LogFormatConfiguration can be only one per application
 	 */
-	private static LogFormatConfiguration logFormatConfiguration;
+	private final static LogFormatConfiguration logFormatConfiguration = LogFormatConfigurationUtils.readConfiguration();
 
 	public static LogFormatConfiguration getLogFormatConfiguration() {
 		return logFormatConfiguration;
 	}
 
-	public LogAspect() {
-		logFormatConfiguration = LogFormatConfigurationUtils.readConfiguration();
-	}
-
-	/**
-	 * An alternative LogFormatConfiguration can be used in spring aop
-	 * 
-	 * @param logFormatConfiguration
-	 */
-	public LogAspect(LogFormatConfiguration logFormatConfiguration) {
-		if (logFormatConfiguration == null) {
-			throw new NullPointerException();
-		}
-		LogAspect.logFormatConfiguration = logFormatConfiguration;
-	}
 
 	/*
 	 * it is marked static, because if there is more than one instance of LogApsect we must have one ident system per thread
@@ -93,7 +78,7 @@ public class LogAspect {
 	}
 
 	public static final Integer getThreadLocalIdent() {
-		return thraedLocalIndent.get() == null ? 0 : thraedLocalIndent.get();
+		return thraedLocalIndent.get() == null ? Integer.valueOf(0) : thraedLocalIndent.get();
 	}
 
 	private Object log(ProceedingJoinPoint pjp, Log log) throws Throwable {
@@ -162,19 +147,19 @@ public class LogAspect {
 	private void increaseIndent(Log log) {
 		if (log.indent()) {
 			if (thraedLocalIndent.get() == null) {
-				thraedLocalIndent.set(0);
+				thraedLocalIndent.set(Integer.valueOf(0));
 			} else if (thraedLocalIndent.get() != null) {
-				thraedLocalIndent.set(thraedLocalIndent.get() + 1);
+				thraedLocalIndent.set(Integer.valueOf(thraedLocalIndent.get() + 1));
 			}
 		}
 	}
 
 	private void decreaseIndent(Log log) {
 		if (log.indent()) {
-			if (thraedLocalIndent.get() == 0) {
+			if (thraedLocalIndent.get().equals(Integer.valueOf(0))) {
 				thraedLocalIndent.remove();
 			} else {
-				thraedLocalIndent.set(thraedLocalIndent.get() - 1);
+				thraedLocalIndent.set(Integer.valueOf(thraedLocalIndent.get() - 1));
 			}
 		}
 	}
@@ -206,6 +191,8 @@ public class LogAspect {
 				logger.error(messageBuilder.build(), throable);
 			}
 			break;
+		default:
+			throw new IllegalStateException("it seems that there was introduced new Log.Level which is not supported. Report a bug");
 		}
 	}
 

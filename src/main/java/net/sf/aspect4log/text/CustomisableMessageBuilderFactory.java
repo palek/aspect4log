@@ -117,7 +117,7 @@ public class CustomisableMessageBuilderFactory implements MessageBuilderFactory 
 		this.returnedValueSeporator = exceptionValueSymbol;
 	}
 
-	private LogFormatter logFormatter = new LogFormatter();
+	private final LogFormatter logFormatter = new LogFormatter();
 
 	@Override
 	public MessageBuilder createEnterMessageBuilder(String methodName, Log log, Object[] args) {
@@ -138,9 +138,9 @@ public class CustomisableMessageBuilderFactory implements MessageBuilderFactory 
 		private final Log log;
 		private final Object[] args;
 
-		private SimpleMdcMessageBuilder(Log log, Object[] args) {
+		protected SimpleMdcMessageBuilder(Log log, Object[] args) {
 			this.log = log;
-			this.args = args;
+			this.args = (Object[])args.clone();
 		}
 
 		@Override
@@ -156,8 +156,8 @@ public class CustomisableMessageBuilderFactory implements MessageBuilderFactory 
 		}
 
 		@Override
-		protected void buildDirectionSymbol() {
-			getStringBuilder().append(methodEnterSymbol);
+		protected void buildDirectionSymbol(StringBuilder stringBuilder) {
+			stringBuilder.append(methodEnterSymbol);
 		}
 	}
 
@@ -173,21 +173,21 @@ public class CustomisableMessageBuilderFactory implements MessageBuilderFactory 
 		}
 
 		@Override
-		protected void buildDirectionSymbol() {
-			getStringBuilder().append(methodSuccessfulExitSymbol);
+		protected void buildDirectionSymbol(StringBuilder stringBuilder) {
+			stringBuilder.append(methodSuccessfulExitSymbol);
 		}
 
 		@Override
-		protected void buildResultDelimeter() {
+		protected void buildResultDelimeter(StringBuilder stringBuilder) {
 			if (isBuildingResultRequired()) {
-				getStringBuilder().append(returnedValueSeporator);
+				stringBuilder.append(returnedValueSeporator);
 			}
 		}
 
 		@Override
-		protected void buildResult() {
+		protected void buildResult(StringBuilder stringBuilder) {
 			if (isBuildingResultRequired()) {
-				getStringBuilder().append(logFormatter.toString(getLog().resultTemplate(), result));
+				stringBuilder.append(logFormatter.toString(getLog().resultTemplate(), result));
 			}
 		}
 
@@ -199,7 +199,7 @@ public class CustomisableMessageBuilderFactory implements MessageBuilderFactory 
 	private class ExceptionReturnMessageBuilder extends CustomisableMessageBulder {
 
 		private final Throwable throwable;
-		private String exceptionExitTemplate;
+		private final String exceptionExitTemplate;
 
 		public ExceptionReturnMessageBuilder(String methodName, Log log, Object[] args, Throwable throwable, String exceptionExitTemplate) {
 			super(methodName, log, args, logFormatter);
@@ -208,19 +208,19 @@ public class CustomisableMessageBuilderFactory implements MessageBuilderFactory 
 		}
 
 		@Override
-		protected void buildDirectionSymbol() {
-			getStringBuilder().append(methodThrownExceptionExitSymbol);
+		protected void buildDirectionSymbol(StringBuilder stringBuilder) {
+			stringBuilder.append(methodThrownExceptionExitSymbol);
 		}
 
 		@Override
-		protected void buildResultDelimeter() {
-			getStringBuilder().append(thrownExceptionSeporator);
+		protected void buildResultDelimeter(StringBuilder stringBuilder) {
+			stringBuilder.append(thrownExceptionSeporator);
 		}
 
 		@Override
-		protected void buildResult() {
+		protected void buildResult(StringBuilder stringBuilder) {
 			if (!exceptionExitTemplate.isEmpty()) {
-				getStringBuilder().append(logFormatter.toString(exceptionExitTemplate, throwable));
+				stringBuilder.append(logFormatter.toString(exceptionExitTemplate, throwable));
 			}
 		}
 	}
@@ -231,11 +231,10 @@ public class CustomisableMessageBuilderFactory implements MessageBuilderFactory 
 	}
 
 	private abstract class CustomisableMessageBulder implements MessageBuilder {
-		private final StringBuilder stringBuilder = new StringBuilder();
 		private final String methodName;
 		private final Log log;
 		private final Object[] args;
-		private LogFormatter logFormatter;
+		private final LogFormatter logFormatter;
 
 		public CustomisableMessageBulder(String methodName, Log log, Object[] args, LogFormatter logFormatter) {
 			this.methodName = methodName;
@@ -246,34 +245,35 @@ public class CustomisableMessageBuilderFactory implements MessageBuilderFactory 
 
 		@Override
 		public final String build() {
-			buildDirectionSymbol();
-			buildIndent();
-			buildMethodName();
-			buildMethodOpenBracket();
-			buildArguments();
-			buildMethodClosedBracket();
-			buildResultDelimeter();
-			buildResult();
+			StringBuilder stringBuilder = new StringBuilder();
+			buildDirectionSymbol(stringBuilder);
+			buildIndent(stringBuilder);
+			buildMethodName(stringBuilder);
+			buildMethodOpenBracket(stringBuilder);
+			buildArguments(stringBuilder);
+			buildMethodClosedBracket(stringBuilder);
+			buildResultDelimeter(stringBuilder);
+			buildResult(stringBuilder);
 			return stringBuilder.toString();
 		}
 
-		protected void buildIndent() {
+		protected void buildIndent(StringBuilder stringBuilder) {
 			for (int i = 0; i < LogAspect.getThreadLocalIdent().intValue(); i++) {
 				stringBuilder.append(indentText);
 			}
 		}
 
-		abstract protected void buildDirectionSymbol();
+		abstract protected void buildDirectionSymbol(StringBuilder stringBuilder);
 
-		protected void buildMethodName() {
+		protected void buildMethodName(StringBuilder stringBuilder) {
 			stringBuilder.append(methodName);
 		}
 
-		protected void buildMethodOpenBracket() {
+		protected void buildMethodOpenBracket(StringBuilder stringBuilder) {
 			stringBuilder.append("(");
 		}
 
-		protected void buildArguments() {
+		protected void buildArguments(StringBuilder stringBuilder) {
 			if (!log.argumentsTemplate().isEmpty()) {
 				if (Log.ARGUMENTS_DEFAULT_TEMPLATE.equals(log.argumentsTemplate())) {
 					stringBuilder.append(logFormatter.toString(args));
@@ -283,20 +283,16 @@ public class CustomisableMessageBuilderFactory implements MessageBuilderFactory 
 			}
 		}
 
-		protected void buildMethodClosedBracket() {
+		protected void buildMethodClosedBracket(StringBuilder stringBuilder) {
 			stringBuilder.append(")");
 		}
 
-		protected void buildResultDelimeter() {
+		protected void buildResultDelimeter(StringBuilder stringBuilder) {
 			// there is no result by default
 		}
 
-		protected void buildResult() {
+		protected void buildResult(StringBuilder stringBuilder) {
 			// there is no result by default
-		}
-
-		protected StringBuilder getStringBuilder() {
-			return stringBuilder;
 		}
 
 		protected Log getLog() {

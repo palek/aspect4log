@@ -14,7 +14,7 @@ public class FooConfiguration {
 
 	@Bean
 	LogAspect createLogAspect(){
-		return new LogAspect();
+		return  LogAspect.aspectOf();
 	}
 	
 }

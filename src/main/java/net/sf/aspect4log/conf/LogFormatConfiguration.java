@@ -62,7 +62,7 @@ public class LogFormatConfiguration {
 @XmlAccessorType(XmlAccessType.FIELD)
 class MessageBuilderFactoryConfiguration {
 	@XmlAnyElement
-	private List<Element> properties = new ArrayList<Element>();
+	private final List<Element> properties = new ArrayList<Element>();
 
 	@XmlAttribute(name = "class")
 	private Class<? extends MessageBuilderFactory> clazz;
