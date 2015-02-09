@@ -12,7 +12,7 @@
 		<returnedValueSeporator> = </returnedValueSeporator>
 		<thrownExceptionSeporator> &gt;&gt; </thrownExceptionSeporator>
 
-		<elementsDelitmeter>, </elementsDelitmeter>
+		<elementsDelitmiter>, </elementsDelitmiter>
 		<mapKeyValueDelimeter> : </mapKeyValueDelimeter>
 		<arrayBeginsBracket>{</arrayBeginsBracket>
 		<arrayEndsBracket>}</arrayEndsBracket>
@@ -21,11 +21,11 @@
 		
 		<!-- replaces default toString value in case toString is undefied, useful to make log a bit more readable. 
 		pitfalls : If u need to distinct if objects with undefined toString are same do not define this value  -->
-		<undefindedToStringMethodSymbol>¿</undefindedToStringMethodSymbol>
+		<undefindedToStringMethodSymbol>?</undefindedToStringMethodSymbol>
 		<!-- replaces the error message from log template, useful if you try to address vararg which is not always present    -->
-		<errorEvaluatingToStringSymbol>É</errorEvaluatingToStringSymbol>
+		<errorEvaluatingToStringSymbol>!!!</errorEvaluatingToStringSymbol>
 		<!-- if not specified null will be printed, useful when your application may write String with "null" value, this helps to distinct null string and null value  -->
-		<nullSymbol>Ø</nullSymbol>
+		<nullSymbol>NULL</nullSymbol>
 
 	</messageBuilderFactoryConfiguration>
 

@@ -35,6 +35,12 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 
+/**
+ * This class is responsible for holding log format configuration.
+ * 
+ * @author yilativs
+ *
+ */
 @XmlRootElement(name="aspect4logConfiguration")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class LogFormatConfiguration {

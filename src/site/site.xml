@@ -1,0 +1,39 @@
+<!-- 
+	This file is part of the aspect4log project.
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU Lesser General Public License
+	as published by the Free Software Foundation; version 2.1
+	of the License.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU Lesser General Public License for more details.
+	You should have received a copy of the GNU Lesser General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
+	
+	Copyright 2013-2015 Vitaliy Semochkin aka Yilativs
+	http://books.sonatype.com/mvnref-book/reference/site-generation-sect-custom-descript.html
+	http://imgkid.com/logger-clipart.shtml
+	http://www.shutterstock.com/s/skidder/search.html?page=1
+	http://www.clipartof.com/portfolio/patrimonio/illustration/retro-worker-carrying-a-log-in-a-circle-of-sun-rays-1202048.html
+	http://www.querydsl.com/
+	http://maven.apache.org/guides/mini/guide-site.html
+-->
+<project name="aspect4log">
+    <poweredBy>
+		<logo name="SourceForge" href="http://sourceforge.net/projects/aspect4log" img="http://sourceforge.net/sflogo.php?group_id=212942type=5" />
+		<logo name="Maven" href="http://maven.apache.org/" img="http://maven.apache.org/images/logos/maven-feather.png" />
+	</poweredBy>
+    <body>
+        <menu name="aspect4log">
+            <item name="About" href="/about.html" />
+            <item name="Quick Start With AspectJ" href="/quick-start-aspectj.html" />
+            <item name="Quick Start With SpringAOP" href="/quick-start-springaop.html" />
+            <item name="Usage" href="/usage.html" />
+			<!--<item name="FAQ" href="/faq.html" /> -->
+			<item name="Download" href=http://sourceforge.net/projects/aspect4log/files/ />
+		</menu>
+		<menu ref="reports" />
+    </body>
+</project>

@@ -18,19 +18,28 @@ package net.sf.aspect4log.text;
 
 import net.sf.aspect4log.Log;
 import net.sf.aspect4log.aspect.LogAspect;
+import net.sf.aspect4log.conf.LogFormatConfiguration;
 
+/**
+ *
+ * This class is responsible for creating {@link MessageBuilder} instances.
+ * Log decoration properties are set by {@link LogFormatConfiguration via reflection.
+ * 
+ * @author yilativs
+ *
+ */
 public class CustomisableMessageBuilderFactory implements MessageBuilderFactory {
 	public static final String METHOD_ENTER_SYMBOL = "↓";
 	public static final String METHOD_SUCCESSFUL_EXIT_SYMBOL = "↑";
 	public static final String METHOD_THROWN_EXCEPTION_EXIT_SYMBOL = "⇑";
-	public static final String RETURNED_VALUE_SEPORATOR = " → ";
-	public static final String THROWN_EXCEPTION_SEPORATOR = " ⇒ ";
+	public static final String RETURNED_VALUE_SEPARATOR = " → ";
+	public static final String THROWN_EXCEPTION_SEPARATOR = " ⇒ ";
 
 	private String methodEnterSymbol = METHOD_ENTER_SYMBOL;
 	private String methodSuccessfulExitSymbol = METHOD_SUCCESSFUL_EXIT_SYMBOL;
 	private String methodThrownExceptionExitSymbol = METHOD_THROWN_EXCEPTION_EXIT_SYMBOL;
-	private String returnedValueSeporator = RETURNED_VALUE_SEPORATOR;
-	private String thrownExceptionSeporator = THROWN_EXCEPTION_SEPORATOR;
+	private String returnedValueSeparator = RETURNED_VALUE_SEPARATOR;
+	private String thrownExceptionSeparator = THROWN_EXCEPTION_SEPARATOR;
 
 	/**
 	 * 
@@ -61,8 +70,8 @@ public class CustomisableMessageBuilderFactory implements MessageBuilderFactory 
 		this.indentText = indentText;
 	}
 
-	public void setElementsDelitmeter(String elementsDelitmeter) {
-		logFormatter.setElementsDelitmeter(elementsDelitmeter);
+	public void setElementsDelitmiter(String elementsDelitmiter) {
+		logFormatter.setElementsDelitmiter(elementsDelitmiter);
 	}
 
 	public void setMapKeyValueDelimeter(String mapKeyValueDelimeter) {
@@ -109,12 +118,12 @@ public class CustomisableMessageBuilderFactory implements MessageBuilderFactory 
 		this.methodThrownExceptionExitSymbol = returnValueSymbol;
 	}
 
-	public void setThrownExceptionSeporator(String methodExceptionReturSymbol) {
-		this.thrownExceptionSeporator = methodExceptionReturSymbol;
+	public void setThrownExceptionSeparator(String methodExceptionReturSymbol) {
+		this.thrownExceptionSeparator = methodExceptionReturSymbol;
 	}
 
-	public void setReturnedValueSeporator(String exceptionValueSymbol) {
-		this.returnedValueSeporator = exceptionValueSymbol;
+	public void setReturnedValueSeparator(String exceptionValueSymbol) {
+		this.returnedValueSeparator = exceptionValueSymbol;
 	}
 
 	private final LogFormatter logFormatter = new LogFormatter();
@@ -180,7 +189,7 @@ public class CustomisableMessageBuilderFactory implements MessageBuilderFactory 
 		@Override
 		protected void buildResultDelimeter(StringBuilder stringBuilder) {
 			if (isBuildingResultRequired()) {
-				stringBuilder.append(returnedValueSeporator);
+				stringBuilder.append(returnedValueSeparator);
 			}
 		}
 
@@ -214,7 +223,7 @@ public class CustomisableMessageBuilderFactory implements MessageBuilderFactory 
 
 		@Override
 		protected void buildResultDelimeter(StringBuilder stringBuilder) {
-			stringBuilder.append(thrownExceptionSeporator);
+			stringBuilder.append(thrownExceptionSeparator);
 		}
 
 		@Override

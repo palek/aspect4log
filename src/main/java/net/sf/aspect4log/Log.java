@@ -24,7 +24,9 @@ import java.lang.annotation.Target;
 
 /**
  * 
- * Defines the logging rules on method or on the entire class.
+ * This annotation defines logging rules on method, constructor or on the entire class.
+ * 
+ * Annotation placed on constructor/method overrides all values of annotation placed on class.
  * 
  * @author Vitaliy S <a href="mailto:vitaliy.se@gmail.com">
  * 
@@ -69,7 +71,7 @@ public @interface Log {
 		 */
 		String template() default EXCEPTION_DEFAULT_TEMPLATE;
 	}
-
+	
 	public static final String ARGUMENTS_DEFAULT_TEMPLATE = "${args}";
 	public static final String RESULT_DEFAULT_TEMPLATE = "${result}";
 
@@ -79,10 +81,10 @@ public @interface Log {
 	Level enterLevel() default Level.DEBUG;
 
 	/**
+	 * WARNING: making exitLevel smaller than enterLevel can make the log hard to read.
 	 * 
-	 * @return {@link Level} to use on successful method exit
-	 * 
-	 *         WARNING: making exitLevel smaller than enterLevel can make the log hard to read
+	 * @return {@link Level} to use on successful method exit.
+	 *         
 	 */
 	Level exitLevel() default Level.DEBUG;
 
@@ -91,12 +93,18 @@ public @interface Log {
 	 */
 	Exceptions[] on() default { @Exceptions(level = Level.ERROR, exceptions = { RuntimeException.class }, stackTrace = true),
 			@Exceptions(level = Level.WARN, exceptions = { Exception.class }, stackTrace = false) };
-
+	
+	/**
+	 * specifies template for logging arguments
+	 * by default it is ${args} which means all arguments are logged.
+	 * you can write it yourself by referencing to arguments by index. E.g ${args[0]},${args[1]} etc..
+	 * @return arguments template
+	 */
 	String argumentsTemplate() default ARGUMENTS_DEFAULT_TEMPLATE;
 
 	/**
 	 * 
-	 * @return A pattern representing value returned from the method. The default value is $result.
+	 * @return A pattern representing value returned from the method. The default value it is $result.
 	 */
 	String resultTemplate() default RESULT_DEFAULT_TEMPLATE;
 

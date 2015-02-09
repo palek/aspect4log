@@ -11,7 +11,6 @@
 	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
 		<target>System.out</target>
 		<encoder>
-			<charset>UTF-8</charset>
 			<!-- http://logback.qos.ch/manual/layouts.html -->
 			<pattern>%date{HH:mm:ss} %-5.5level [%10.10thread] %20.20mdc  %60.60logger{60}  : %msg%n</pattern>
 		</encoder>

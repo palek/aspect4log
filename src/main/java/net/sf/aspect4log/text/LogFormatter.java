@@ -27,9 +27,15 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.ArrayUtils;
-
+/**
+ * This class is responsible for building log blocks.
+ * 
+ * @author yilativs
+ *
+ */
 public class LogFormatter {
 
+	private static final String ERROR_EVALUTTING_TO_STRING_SYMBOL = "☣";
 	public static final String ELEMENTS_DELITMETER = ", ";
 	public static final String MAP_KEY_VALUE_DELIMETER = "=";
 	public static final String ARRAY_BEGINS_BRACKET = "[";
@@ -39,7 +45,7 @@ public class LogFormatter {
 	public static final String ITERABLE_ENDS_BRACKET = "}";
 
 
-	private String elementsDelitmeter = ELEMENTS_DELITMETER;
+	private String elementsDelitmiter = ELEMENTS_DELITMETER;
 	private String mapKeyValueDelimeter = MAP_KEY_VALUE_DELIMETER;
 	private String arrayBeginsBracket = ARRAY_BEGINS_BRACKET;
 	private String arrayEndsBracket = ARRAY_ENDS_BRACKET;
@@ -47,16 +53,20 @@ public class LogFormatter {
 	private String iterableBeginsBracket = ITERABLE_BEGINS_BRACKET;
 	private String iterableEndsBracket = ITERABLE_ENDS_BRACKET;
 
+	
 	private String undefindedToStringMethodSymbol;
-	private String errorEvaluatingToStringSymbol;
+	/**
+	 * a symbol to be shown in case exception happen during to
+	 */
+	private String errorEvaluatingToStringSymbol=ERROR_EVALUTTING_TO_STRING_SYMBOL;
 	private String nullSymbol;
 
-	public String getElementsDelitmeter() {
-		return elementsDelitmeter;
+	public String getElementsDelitmiter() {
+		return elementsDelitmiter;
 	}
 
-	public void setElementsDelitmeter(String elementsDelitmeter) {
-		this.elementsDelitmeter = elementsDelitmeter;
+	public void setElementsDelitmiter(String elementsDelitmiter) {
+		this.elementsDelitmiter = elementsDelitmiter;
 	}
 
 	public String getMapKeyValueDelimeter() {
@@ -145,7 +155,7 @@ public class LogFormatter {
 			stringBuilder.append(mapKeyValueDelimeter);
 			toString(stringBuilder, entry.getValue());
 			if (iterator.hasNext()) {
-				stringBuilder.append(elementsDelitmeter);
+				stringBuilder.append(elementsDelitmiter);
 			}
 		}
 		return stringBuilder.toString();
@@ -159,7 +169,7 @@ public class LogFormatter {
 		for (Iterator<?> iterator = iterable.iterator(); iterator.hasNext();) {
 			toString(stringBuilder, iterator.next());
 			if (iterator.hasNext()) {
-				stringBuilder.append(elementsDelitmeter);
+				stringBuilder.append(elementsDelitmiter);
 			}
 		}
 		return stringBuilder.toString();
@@ -170,7 +180,7 @@ public class LogFormatter {
 		for (int i = 0; i < array.length; i++) {
 			toString(stringBuilder, array[i]);
 			if (i < array.length - 1) {
-				stringBuilder.append(elementsDelitmeter);
+				stringBuilder.append(elementsDelitmiter);
 			}
 		}
 		return stringBuilder.toString();
@@ -201,13 +211,12 @@ public class LogFormatter {
 			} else if (o instanceof Collection<?>) {
 				addIterrableBrackets(stringBuilder, toString(((Iterable<?>) o)));
 			} else {
-				if (isToStringOverriden(o.getClass()) || undefindedToStringMethodSymbol==null) {
+				if (undefindedToStringMethodSymbol==null || isToStringOverriden(o.getClass()) ) {
 					try{
 						stringBuilder.append(o);
 					}catch(RuntimeException e){
 						addExceptionOnToStringEvaluation(stringBuilder,e.toString());
 					}
-						
 				} else {
 					stringBuilder.append(undefindedToStringMethodSymbol);
 				}
@@ -233,8 +242,8 @@ public class LogFormatter {
 	}
 	
 
-// TODO consider implementing cache on WeakHashReferences (yes, because class objects are rare to be gc's it's ok to use WeakHashReferences
-//	private ConcurrentMap<Class<?>, Boolean> classDefaultToStringOverridenMap = new ConcurrentHashMap<Class<?>, Boolean>();
+// @TODO consider implementing cache on WeakHashReferences (because class objects are rare to be gc's it's ok to use WeakHashReferences
+// private ConcurrentMap<Class<?>, Boolean> classDefaultToStringOverridenMap = new ConcurrentHashMap<Class<?>, Boolean>();
 //
 //	public boolean isToStringOverriden(Class<?> clazz) {
 //		try {

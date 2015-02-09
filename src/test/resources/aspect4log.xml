@@ -12,14 +12,14 @@
 		<returnedValueSeporator> → </returnedValueSeporator>
 		<thrownExceptionSeporator> ⇒ </thrownExceptionSeporator>
 
-		<elementsDelitmeter>, </elementsDelitmeter>
+		<elementsDelitmiter>, </elementsDelitmiter>
 		<mapKeyValueDelimeter>=</mapKeyValueDelimeter>
 		<arrayBeginsBracket>[</arrayBeginsBracket>
 		<arrayEndsBracket>]</arrayEndsBracket>
 		<iterableBeginsBracket>{</iterableBeginsBracket>
 		<iterableEndsBracket>}</iterableEndsBracket>
 		<undefindedToStringMethodSymbol>¿</undefindedToStringMethodSymbol>
-		<errorEvaluatingToStringSymbol>É</errorEvaluatingToStringSymbol>
+		<errorEvaluatingToStringSymbol>☣</errorEvaluatingToStringSymbol>
 		<nullSymbol>Ø</nullSymbol>
 
 	</messageBuilderFactoryConfiguration>

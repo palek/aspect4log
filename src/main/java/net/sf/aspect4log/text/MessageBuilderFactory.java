@@ -18,6 +18,16 @@ package net.sf.aspect4log.text;
 
 import net.sf.aspect4log.Log;
 
+/**
+ * This interfaces defines methods you need to implement in case you would like to use your own implementations of{@link MessageBuilder}
+ *
+ * E.g. you might want to add some extra information to each log message, while the information is taken from your system. 
+ * 
+ * Nobody, including the authors ever faced the need for another implementation, yet if you create one feel free to share with us why you did it. 
+ *  
+ * @author yilativs
+ *
+ */
 public interface MessageBuilderFactory {
 
 	MessageBuilder createEnterMessageBuilder(String methodName, Log log, Object[] args);

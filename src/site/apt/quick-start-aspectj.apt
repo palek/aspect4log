@@ -1,0 +1,79 @@
+Quick Start with AspectJ
+
+	AspectJ is fast, mature and powerful AOP extension for java. We strongly recommend to try it with aspect4log.
+The benefits of using it over Spring AOP are the following:
+
+	*AspectJ is easier to configure.
+	
+	*AspectJ does not require dependencies on Spring Framework (This should be your AOP framework of choice in case you don't use Spring)
+	
+	*AspectJ allows you to use @Log annotation on any class (while SpringAOP  deals only with spring-managed beans).
+	
+	*AspectJ does not create proxy objects, thus makes the execution faster and with less memory consumptions.
+	
+	*@Log annotation will work with constructors.
+	
+	*@Log annotation will work with all method visibilities levels (while SpringAOP can work only with public).
+
+	Maven configuration:
+	
++---------------------------------------
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.foo</groupId>
+	<artifactId>aspect4log-aspectj-compile-time-sample</artifactId>
+	<version>1.0.1-SNAPSHOT</version>
+	<description>This project shows how to use aspect4log with compile time weaving</description>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.6</maven.compiler.source>
+		<maven.compiler.target>1.6</maven.compiler.target>
+	</properties>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>aspectj-maven-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+					<complianceLevel>1.6</complianceLevel>
+					<showWeaveInfo>true</showWeaveInfo>
+					<aspectLibraries>
+						<aspectLibrary>
+							<groupId>net.sf.aspect4log</groupId>
+							<artifactId>aspect4log</artifactId>
+						</aspectLibrary>
+					</aspectLibraries>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<dependencies>
+		<dependency>
+			<!--we will use logback as logger implementation, it is also possible to log4j and java logging -->
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.aspect4log</groupId>
+			<artifactId>aspect4log</artifactId>
+			<version>1.0.6</version>
+		</dependency>
+	</dependencies>
+</project>
++---------------------------------------
+
+	Now simply place @Log annotation on any class, method or constructor and launch your application.
+	
+	You can checkout a sample project that demonstrates integration with aspectj here {{https://github.com/yilativs/aspect4log-aspectj-compiletime-sample}}

@@ -15,7 +15,13 @@
   
  */
 package net.sf.aspect4log.text;
-
+/**
+ * This interface is implemented by classes that will log different events 
+ * such  as method/constructor enter, successful method/constructor exit, method/constructor exit on exception.
+ * 
+ * @author yilativs
+ *
+ */
 public interface MessageBuilder {
 	String build();
 }

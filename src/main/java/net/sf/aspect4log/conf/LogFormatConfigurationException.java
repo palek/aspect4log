@@ -15,7 +15,12 @@
   
  */
 package net.sf.aspect4log.conf;
-
+/**
+ * This exception is thrown in case  aspect4log.xml or aspect4log-test.xml contains errors.  
+ * 
+ * @author yilativs
+ *
+ */
 public class LogFormatConfigurationException extends RuntimeException {
 
 	private static final long serialVersionUID = -3397749350256923573L;
