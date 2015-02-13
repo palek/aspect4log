@@ -2,7 +2,8 @@ User Manual
 
 * Default behavior
 
-	When you place @Log annotation on a class, aspect4log will log execution of every method and constructor in it. When you place @Log annotation on a method or constructor you override  all parameters of @Log annotation on this class. 
+	When you place {{{http://aspect4log.sourceforge.net/apidocs/index.html}@Log}} annotation on a class, aspect4log will log execution of every method and constructor in it. 
+	When you place {{{http://aspect4log.sourceforge.net/apidocs/index.html}@Log}} annotation on a method or constructor you override  all parameters of @Log annotation on this class. 
 	Default behavior is the following: 
 	
 	*Indent logging is on.
@@ -30,6 +31,32 @@ public class OrderService {
 }
 +--------------------------------------- 	
 	
+* Controlling Indent
+	
+	By default indent logging is on and each nested method call is logged with an indent.
+	
+	An example of how log might look like with indent on:
+	
++---------------------------------------
+21:24:16 DEBUG r.Robot : ↓start()
+21:24:16 DEBUG r.Robot : ↓	readConfiguration(/path/to/configuration)
+21:24:16 DEBUG r.Robot : ↑	readConfiguration(/path/to/configuration) → Configuration(ttl=4000,numbersOfCpuToUse=1)
+21:24:16 DEBUG r.Robot : ↓	launch(Configuration(ttl=4000,numbersOfCpuToUse=1))
+21:24:16 DEBUG r.Robot : ↑	launch(Configuration(ttl=4000,numbersOfCpuToUse=1))
+21:24:16 DEBUG r.Robot : ↑start()
++---------------------------------------	
+	
+	To control it use indent attribute of @Log annotation. 
+	In case you want to log a method which using recursion you may consider to disable indent.
+
++---------------------------------------
+@Log(indent=false)
+public List<Item> recursiveItemSearch(Item itemExample){
+	//... seach code goes here ...
+	return recursiveItemSearch(itemExample);
+}
++---------------------------------------
+
 * Method enter and exit log levels
 	
 	There are cases when you want to switch log level for method/constructor enter/exit from default DEBUG level.
@@ -125,19 +152,6 @@ public Order createOrder(Customer customer, String address, Item... items){
 @Log( mdcKey = "customerId", mdcTemplate = "${args[0].id}")
 public Order createOrder(Customer customer, String address, Item... items){
 ...
-}
-+---------------------------------------
-
-* Controlling Indent
-	
-	By default indent logging is on. To control it use indent attribute of @Log annotation. 
-	In case you want to log a method which using recursion you may consider to disable indent.
-
-+---------------------------------------
-@Log(indent=false)
-public List<Item> recursiveItemSearch(Item itemExample){
-	//... seach code goes here ...
-	return recursiveItemSearch(itemExample);
 }
 +---------------------------------------
 

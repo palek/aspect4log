@@ -32,7 +32,7 @@
             <item name="Quick Start With SpringAOP" href="/quick-start-springaop.html" />
             <item name="Usage" href="/usage.html" />
 			<!--<item name="FAQ" href="/faq.html" /> -->
-			<item name="Download" href=http://sourceforge.net/projects/aspect4log/files/ />
+			<item name="Download" href="http://sourceforge.net/projects/aspect4log/files/" />
 		</menu>
 		<menu ref="reports" />
     </body>

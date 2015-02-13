@@ -1,12 +1,12 @@
 About
 
-	Do you remember how many times when something wrong happened you asked yourself, why I didn't logged it?!
-	Without aspect oriented programming it was always a challenge to write to compromise between writing 
+	Do you remember how many times when something wrong happened you asked yourself, why didn't I (or that guy) log it?!
+	Without aspect oriented programming (AOP) it was always a challenge to reach a compromise between writing 
 	a clean code and writing code that logs enough.
 
-	With AOP finally getting popular by means of aspectj and spring aop frameworks it is finally possible to do both.
+	With AOP steadily getting popular by means of AspectJ and SpringAOP frameworks it is finally possible to do both.
 	Aspect4log allows you to describe what you want to log, with which level, on top of the class or method
-	by means of  @Log annotation {{{http://apidocs/index.html}@Log}}.
+	by means of  @Log annotation {{{http://aspect4log.sourceforge.net/apidocs/index.html}@Log}}.
 	@Log annotation allows you to control method enter and exit log level, allows you to print given arguments and returned value, 
 	bind {{{http://logback.qos.ch/manual/mdc.html}MDC}} key/values, use idents that makes it much easyer to read logs.
 	
