@@ -1,9 +1,9 @@
-User Manual
+ User Manual
 
 * Default behavior
 
 	When you place {{{http://aspect4log.sourceforge.net/apidocs/index.html}@Log}} annotation on a class, aspect4log will log execution of every method and constructor in it. 
-	When you place {{{http://aspect4log.sourceforge.net/apidocs/index.html}@Log}} annotation on a method or constructor you override  all parameters of @Log annotation on this class. 
+	When you place @Log annotation on a method or constructor you override  all parameters of @Log annotation on this class. 
 	Default behavior is the following: 
 	
 	*Indent logging is on.
@@ -16,7 +16,7 @@ User Manual
 	
 	*All arguments are logged. All argument objects are converted to string by calling a toString() method, ',' is used as a separator.
 	
-	*Result object is logged. It is converted to string by calling to string method.
+	*Result object is logged. It is converted to string by calling toString() method.
 	
 	*Thrown exception is logged. It is converted to string by calling toString() method.
 	
@@ -47,7 +47,7 @@ public class OrderService {
 +---------------------------------------	
 	
 	To control it use indent attribute of @Log annotation. 
-	In case you want to log a method which using recursion you may consider to disable indent.
+	In case you want to log a method which is using recursion you may consider to disable indent.
 
 +---------------------------------------
 @Log(indent=false)
@@ -59,10 +59,10 @@ public List<Item> recursiveItemSearch(Item itemExample){
 
 * Method enter and exit log levels
 	
-	There are cases when you want to switch log level for method/constructor enter/exit from default DEBUG level.
+	There are cases when you want to switch a log level for a method/constructor enter/exit from the default DEBUG level.
 	Some of these cases are:
 	
-	*Method is often executed and the details of execution are interested only during tracing. In this case set enter and exit log levels to TRACE.
+	*Method is often executed and the details of execution are interesting only during tracing. In this case set enter and the log levels to TRACE.
 	
 	*Method invocation is important, e.g user authentication. In this case we set enter and exit log levels to INFO.	
 	
@@ -70,7 +70,7 @@ public List<Item> recursiveItemSearch(Item itemExample){
 	
 	[]
 	
-	Here is an example of how to set log levels of particular method to NONE:
+	Here is an example of how to set log levels of the particular method to NONE:
 
 +---------------------------------------
 @Log(enterLevel=Level.NONE, exitLevel=Level.NONE, on=@Exceptions(level=Level.NONE))
@@ -82,19 +82,19 @@ public List<Item> recursiveItemSearch(Item itemExample){
 	
 * Exception log levels
 	
-	There are cases when you want to switch from default exception log levels, some of such cases are:
+	There are cases when you want to switch from the default exception log levels, some of such cases are:
 	
-	*An exception is part of business logic, in this case you want to log such exception with log level INFO.
+	*An exception is a part of business logic. In this case you might want to log this exception with INFO level.
 	
-	*An exception is checked but it is an error and you would like to log it with ERROR level .
+	*An exception is checked but it is an error and you might like to log it with ERROR level.
 
-	*An exception is runtime but it is not an error case (e.g authentication or authorization exceptions), you will probably want to log it with WARN level.
+	*An exception is runtime but it is not an error case (e.g authentication or authorization exceptions), you might want to log it with WARN level.
  	
 	[]
 
 +---------------------------------------	
 @Log(on = {@Exceptions(exceptions = {RuntimeException.class}),
-		   @Exceptions(exceptions = {PaymentException.class,SecurityException.class}, level=Level.WARN)})
+		  @Exceptions(exceptions = {PaymentException.class,SecurityException.class}, level=Level.WARN)})
 public void pay(Customer customer, Order order, String cardNumber) throws SecurityException, PaymentException {
 ...
 }
@@ -102,7 +102,7 @@ public void pay(Customer customer, Order order, String cardNumber) throws Securi
 	
 * Stack trace 
 
-	Stack trace printing is very useful when something unexpected happen. By default stack trace is printed for runtime exceptions and not printed
+	Stack trace printing is very useful when something unexpected happens. By default a stack trace is printed for runtime exceptions and not printed
 	for checked exceptions. To change this behavior use stackTrace attribute of @Exceptions annotation.
 
 +---------------------------------------	
@@ -116,25 +116,25 @@ public void pay(Customer customer, Order order, String cardNumber) throws Securi
 * Customizing arguments and result templates
 
  	By default all arguments and result are logged by calling toString() method.
- 	There are cases when you may wish to customize what is logged, some of these cases are:
+ 	There are cases when you may want to customize what is logged. Some of these cases are:
  	
- 	*The information should not appear in log. E.g. card number or user's password should never be logged.
+ 	*The information should not appear in a log. E.g. credit card number or user's password should never be logged.
  	
- 	*The string representation of object is to long. E.g. toString of a very large array, collection or a StringBuffer are rare candidates for logging.
+ 	*The string representation of an object is too long. E.g. toString() of a very large array, collection or StringBuffer are rare candidates for logging.
  	
- 	*In some cases you may want to add comments to arguments.
+ 	*In some cases you may want to add comments to a arguments.
    
     [] 
     
-    In order to control arguments and result log representation you may change  Log.argumentsTemplate
-    Log.resultTemplate and Exceptions.template  default values. For each of attributes the corresponding context variables are available.
+    In order to control arguments and result log representation you may change Log.argumentsTemplate
+    Log.resultTemplate and Exceptions.template  default values. For each of those attributes the corresponding context variables are available.
     ${args} is available for argumentsTemplate. It represents arguments array and allows access arguments by index. 
-    E.g. ${args[0]},${args[2]} will print first and third arguments of a method divided by ','.
-    ${result.name} will print a value of property 'name' of the resulting object.
-    ${exception.message} will print a value of property message of a thrown exception.
+    E.g. ${args[0]},${args[2]} will print first and third arguments separated ','.
+    ${result.name} will print a value of the property 'name' of the resulting object.
+    ${exception.message} will print a value of property 'message' of a thrown exception.
  
 +---------------------------------------	     
-@Log(argumentsTemplate = "${args[0].id}", resultTemplate = "${result.id}")
+@Log(argumentsTemplate = "customerId=${args[0].id}", resultTemplate = "orderId=${result.id}")
 public Order createOrder(Customer customer, String address, Item... items){
 ...
 }
@@ -142,11 +142,11 @@ public Order createOrder(Customer customer, String address, Item... items){
 	
 * Mapped Diagnostic Context
 
-	Mapped Diagnostic Context aka {{{http://logback.qos.ch/manual/mdc.html}Mapped Diagnostic Context}} support is a very important feature
+	Mapped Diagnostic Context aka {{{http://logback.qos.ch/manual/mdc.html}MDC}} support is a very important feature
 	of slf4j and underlying logging systems such as logback and log4j. During concurrent program execution there maybe several threads executing 
-	same method simultaneously. The log will be written in the order of method execution in time, to distinct one thread from another you can place
-	an MDC key set to a thread specific value and after that use utility similar to unix grep to extract log of lines with a specific key value only.
-	In our case customerId is a reasonable candidate for an MDC key.  	
+	the same method simultaneously. The log will be written in the order of execution in time, to distinguish one thread from another you can place
+	an MDC key to a thread specific value.  To analyze log use utility like unix grep to extract log lines with the specific MDC key value.
+	E.g. customerId is a reasonable candidate for the MDC key.  	
 
 +---------------------------------------
 @Log( mdcKey = "customerId", mdcTemplate = "${args[0].id}")
@@ -158,42 +158,42 @@ public Order createOrder(Customer customer, String address, Item... items){
 	
 * Customizing Logging Decoration
 	
-	Log decoration is possible to configure via aspect4log.xml  placed in root of your classpath.
+	Log decorations are can be configured via aspect4log.xml  placed in root of your classpath.
 	The parameters that may be changed are:
 	
 	*useIndent - defines if the indent logging is ON globally, the default value is true
 	
 	*indentText - defines the indent text, tab symbol is default value
 	
-	*methodEnterSymbol - defines method enter symbol
+	*methodEnterSymbol - defines the method enter symbol
 	
-	*methodSuccessfulExitSymbol - defines method successful exit symbol
+	*methodSuccessfulExitSymbol - defines the method successful exit symbol
 	
-	*methodThrownExceptionExitSymbol - defines method thrown exception exit symbol
+	*methodThrownExceptionExitSymbol - defines the method thrown exception exit symbol
 	
-	*returnedValueSeparator - defines returned value separator 
+	*returnedValueSeparator - defines the returned value separator 
 	
-	*thrownExceptionSeparator - defines thrown exceptions separator
+	*thrownExceptionSeparator - defines the thrown exceptions separator
 	
-	*elementsDelitmiter> - defines collection and array elements delimiter
+	*elementsDelitmiter - defines the collection and array elements delimiter
 	
-	*mapKeyValueDelimiter> -defines map key value delimiter 
+	*mapKeyValueDelimiter - defines the map key value delimiter 
 	
-	*arrayBeginsBracket - defines array opening bracket 
+	*arrayBeginsBracket - defines the array opening bracket
 	
-	*arrayEndsBracket - defines array closing bracket
+	*arrayEndsBracket - defines the array closing bracket 
 	
-	*iterableBeginsBracket> - defines iterable begins bracket
+	*iterableBeginsBracket - defines the iterable begins bracket
 	
-	*iterableEndsBracket - defines iterible ends bracket, default is value is "}"
+	*iterableEndsBracket - defines the iterible ends bracket
 	
-	*undefindedToStringMethodSymbol - defines what to print in case toString is undefined default value is not set, 
-	in this case the defualt toString will value will be printed. Some people to have cleaner logs prefer to use  "¿" symbol.
-	Note: there are cases when it is needed to use default toString. 
-	When you need to see if two logged objects refer to same object it is better leave  undefindedToStringMethodSymbol undefined.distinct to objects with undefined.
+	*undefindedToStringMethodSymbol - defines what to print in case toString() is undefined, the default value is not set, 
+	in this case the default toString() will value will be printed. Some peoples prefer to use "¿" symbol to have cleaner logs.
+	Note: there are cases when it is needed to use default toString(). 
+	When you need to see if two logged objects refer the same object it is better to leave undefindedToStringMethodSymbol undefined. 
 	
-	*errorEvaluatingToStringSymbol - defines that an exception was thrown during toString execution. The default value is "☣" (yes, it's biohazard symbol, 
-	the symbol was suggested by a person who states that a runtime exception in toString method is a sign of an error in genetic code of a programmer). 
+	*errorEvaluatingToStringSymbol - defines a symbol indicating that an exception was thrown during toString() evaluation. The default value is "☣" (yes, it's a biohazard symbol, 
+	the symbol was suggested by a person who states that a runtime exception in toString() method is a sign of an error in the genetic code of a programmer). 
 	
 	*nullSymbol - defines how to print null value. The default value is Ø.
 	

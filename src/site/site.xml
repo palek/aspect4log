@@ -1,39 +1,72 @@
-<!-- 
-	This file is part of the aspect4log project.
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU Lesser General Public License
-	as published by the Free Software Foundation; version 2.1
-	of the License.
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU Lesser General Public License for more details.
-	You should have received a copy of the GNU Lesser General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
-	
-	Copyright 2013-2015 Vitaliy Semochkin aka Yilativs
-	http://books.sonatype.com/mvnref-book/reference/site-generation-sect-custom-descript.html
-	http://imgkid.com/logger-clipart.shtml
-	http://www.shutterstock.com/s/skidder/search.html?page=1
-	http://www.clipartof.com/portfolio/patrimonio/illustration/retro-worker-carrying-a-log-in-a-circle-of-sun-rays-1202048.html
-	http://www.querydsl.com/
-	http://maven.apache.org/guides/mini/guide-site.html
--->
-<project name="aspect4log">
-    <poweredBy>
-		<logo name="SourceForge" href="http://sourceforge.net/projects/aspect4log" img="http://sourceforge.net/sflogo.php?group_id=212942type=5" />
-		<logo name="Maven" href="http://maven.apache.org/" img="http://maven.apache.org/images/logos/maven-feather.png" />
-	</poweredBy>
-    <body>
-        <menu name="aspect4log">
-            <item name="About" href="/about.html" />
-            <item name="Quick Start With AspectJ" href="/quick-start-aspectj.html" />
-            <item name="Quick Start With SpringAOP" href="/quick-start-springaop.html" />
-            <item name="Usage" href="/usage.html" />
+<!-- This file is part of the aspect4log project. This program is free software; 
+	you can redistribute it and/or modify it under the terms of the GNU Lesser 
+	General Public License as published by the Free Software Foundation; version 
+	2.1 of the License. This program is distributed in the hope that it will 
+	be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of 
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General 
+	Public License for more details. You should have received a copy of the GNU 
+	Lesser General Public License along with this program; if not, write to the 
+	Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 
+	USA. Copyright 2013-2015 Vitaliy Semochkin aka Yilativs http://books.sonatype.com/mvnref-book/reference/site-generation-sect-custom-descript.html 
+	http://imgkid.com/logger-clipart.shtml http://www.shutterstock.com/s/skidder/search.html?page=1 
+	http://www.clipartof.com/portfolio/patrimonio/illustration/retro-worker-carrying-a-log-in-a-circle-of-sun-rays-1202048.html 
+	http://www.querydsl.com/ http://maven.apache.org/guides/mini/guide-site.html -->
+<project name="Aspect4Log - solving the cross-cutting concern all applications have!">
+	<skin>
+		<groupId>org.apache.maven.skins</groupId>
+		<artifactId>maven-fluido-skin</artifactId>
+		<version>1.3.1</version>
+	</skin>
+	<bannerLeft>
+		<src>images/aspect4log-logo-small.png</src>
+	</bannerLeft>
+	<bannerRight>
+    	<!--
+    	<src>http://t3.gstatic.com/images?q=tbn:ANd9GcRHSHTWPsKsMfEikWwzawzHqKD56JXBP-T0LZlcMmEG6_cCuAOr</src>
+    	-->
+    	<!--
+    	<src>images/logger-track.jpeg</src>
+   	    -->
+   	    <name>SourceForge</name>
+   	    <src>images/dontfork.png</src>
+		<href>http://sourceforge.net/projects/aspect4log/</href>
+    </bannerRight>
+	<custom>
+		<fluidoSkin>
+			<topBarEnabled>false</topBarEnabled>
+			<sideBarEnabled>true</sideBarEnabled>
+			<googlePlusOne />
+		</fluidoSkin>
+	</custom>
+	<poweredBy>
+	<!--
+		<logo name="SourceForge" href="http://sourceforge.net/projects/aspect4log"
+			img="http://sourceforge.net/sflogo.php?group_id=212942type=5" />
+		<logo name="Maven" href="http://maven.apache.org/"
+			img="http://maven.apache.org/images/logos/maven-feather.png" />-->
+		<logo name="SourceForge" img="images/sourceforge-logo.png"  href="http://sourceforge.net/projects/aspect4log" /> 	
+			
+	</poweredBy> 
+	<body>
+		<head>
+<script>    (function(i,s,o,g,r,a,m){i[&apos;GoogleAnalyticsObject&apos;]=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,&apos;script&apos;,&apos;//www.google-analytics.com/analytics.js&apos;,&apos;ga&apos;);
+
+  ga(&apos;create&apos;, &apos;UA-59772871-1&apos;, &apos;auto&apos;);
+  ga(&apos;send&apos;, &apos;pageview&apos;);
+</script>
+		</head>
+		
+		<menu name="aspect4log">
+			<item name="About" href="/index.html" />
+			<item name="Quick Start With AspectJ" href="/quick-start-aspectj.html" />
+			<item name="Quick Start With SpringAOP" href="/quick-start-springaop.html" />
+			<item name="Usage" href="/usage.html" />
 			<!--<item name="FAQ" href="/faq.html" /> -->
 			<item name="Download" href="http://sourceforge.net/projects/aspect4log/files/" />
 		</menu>
 		<menu ref="reports" />
-    </body>
+	</body>
 </project>

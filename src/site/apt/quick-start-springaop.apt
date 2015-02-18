@@ -1,14 +1,24 @@
 Quick Start with SpringAOP	
 
-	SpringAOP is popular AOP framework. Many started playing with AOP with this 
-simple and  well documented framework.
-Personally we encourage you not to use it for aspect4log, because aspect4log can work with AspectJ even if the rest of your aspects work on SpringAOP.
-AspectJ is much more effective  and very easy to setup.  
+*Limitations:
+	
+	Due to the popularity of the Spring framework 
+	{{{http://docs.spring.io/spring/docs/current/spring-framework-reference/html/aop.html}SpringAOP}} 
+	is the most popular AOP framework these days. 
+	
+	SpringAOP has it's limitation such as:
 
-	If you really want to use SpringAOP you must be aware of it's limitations. You can use @Log annotation only on spring-managed beans 
-and only on public methods. No constructor logging and non public logging via @Log annotation is possible due to these limitations.
+	*It works only with Spring managed beans, i.e you can use @Log annotation only on spring-managed beans.
+	 
+	*You can not use @Log annotation constructors and methods other than public. 
+	
+	*Logging of method calls in same Spring managed bean will not work unless you call that method via self reference stored in that bean.
 
-	Maven configuration:
+	[]
+	
+	The benefit of SpringAOP is that it unlike AspectJ works with javac compiler.
+
+*Maven configuration:
 
 +---------------------------------------
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
@@ -45,15 +55,18 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	</dependencyManagement>
 	<dependencies>
 		<dependency>
-			<!--We need this because Spring still uses common-logging, jcl-over-slf4j will substitute calles to common-loggin. 
-			    Make sure you excluded common-logging in every module that 	depends on it. 
-			    For more details read http://docs.spring.io/spring/docs/4.1.x/spring-framework-reference/htmlsingle/#overview-logging-slf4j -->
+	<!--It is need needed because Spring still uses common-logging, 
+	    jcl-over-slf4j will substitute calls to common-loggin. 
+		Make sure you excluded common-logging in every module that 	depends on it. 
+		For more details read 
+		http://docs.spring.io/spring/docs/4.1.x/spring-framework-reference/htmlsingle/#overview-logging-slf4j
+	 -->
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
 			<version>${slf4j.version}</version>
 		</dependency>
 		<dependency>
-			<!--we will use logback as logger implementation, it is also possible to log4j and java logging -->
+		<!--we will use logback as logger implementation, it is also possible to log4j and java logging -->
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<version>1.1.2</version>
@@ -74,13 +87,13 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		<dependency>
 			<groupId>net.sf.aspect4log</groupId>
 			<artifactId>aspect4log</artifactId>
-			<version>1.0.5</version>
+			<version>1.0.6</version>
 		</dependency>
 	</dependencies>
 </project>
 +---------------------------------------
 
-	Spring AOP configuration
+*Spring AOP configuration
 
 +---------------------------------------
 @Configuration
@@ -96,6 +109,13 @@ public class SpringAopConfiguration {
 }
 +---------------------------------------
 
-	Now  you can place @Log annotation on any spring bean you have.
+	Place @Log annotation on any spring bean you have to log it's method's invocation.
 	
-	You can checkout a sample project that demonstrates integration with SpringAOP here {{https://github.com/yilativs/aspect4log-springaop-sample}}
+	Checkout a sample project that demonstrates integration with SpringAOP here {{https://github.com/yilativs/aspect4log-springaop-sample}}
+	
+*Note
+
+	We strongly recommend to try integrate aspect4log into your project by means of AspectJ
+	even if the rest of your application uses SpringAOP. Once you started using AspectJ you will find it
+	surprisingly easy in comparison to SprionAOP.
+	

@@ -1,0 +1,29 @@
+About
+
+    Aspect4log  solves the cross-cutting concern that every application has, i.e logging.
+	It provides means to enable logging via {{{http://www.slf4j.org}slf4j}}
+	by annotating you classes and methods with {{{http://aspect4log.sourceforge.net/apidocs/index.html}@Log}}.
+	These will allow you to log more with less code and above all your log will have a unified easy to read and analyze format.
+
+	By default the log output will looks  similar to :
+
++---------------------------------------
+21:24:16 INFO  r.Robot : ↓start()
+21:24:16 DEBUG r.Robot : ↓	readConfiguration(/path/to/configuration)
+21:24:16 DEBUG r.Robot : ↑	readConfiguration(/path/to/configuration) → Configuration(ttl=4000,numbersOfCpuToUse=1)
+21:24:16 DEBUG r.Robot : ↓	launch(Configuration(ttl=4000,numbersOfCpuToUse=1))
+21:24:16 DEBUG r.Robot : ↑	launch(Configuration(ttl=4000,numbersOfCpuToUse=1)) → true
+21:24:16 INFO  r.Robot : ↑start()
++---------------------------------------
+
+	
+	Do you remember how many times when something went wrong on production server you asked yourself, why didn't I (or that guy) logged it?!!
+	Without aspect oriented programming (AOP) it was always a challenge to reach a compromise between writing 
+	a clean code and writing code that logs enough.
+
+	With AOP steadily getting popular by means of AspectJ and SpringAOP frameworks it is finally possible to do both.
+	Aspect4log allows you to describe what you want to log 	by  placing  @Log annotation on a class, method or constructor.
+	@Log annotation allows you to control method enter and exit log levels (including different log levels for different exceptions), print arguments and returned value, 
+	bind {{{http://logback.qos.ch/manual/mdc.html}MDC}} key/values, use indents and decorate logging output.
+	
+
