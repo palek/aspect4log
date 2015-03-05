@@ -31,6 +31,8 @@ public class TestFooService {
 	public void isFoo() {
 		Assert.assertTrue(fooService.isFoo("foo"));
 	}
+	
+	
 
 	@Test
 	public void notFoo() {
@@ -74,6 +76,11 @@ public class TestFooService {
 			// expected
 		}
 		Assert.assertEquals(2,fooService.findFoo().size());
+	}
+	
+	@Test
+	public void testMap(){
+		fooService.getMap();
 	}
 	
 }

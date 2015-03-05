@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aspect4logConfiguration>
+
+	<messageBuilderFactoryConfiguration class="net.sf.aspect4log.text.CustomisableMessageBuilderFactory">
+		<!-- default is true -->
+		<useIndent>true</useIndent>
+		<!--default is \t -->
+		<indentText>	</indentText>
+		<methodEnterSymbol> &gt; </methodEnterSymbol>
+		<methodSuccessfulExitSymbol> &lt; </methodSuccessfulExitSymbol>
+		<methodThrownExceptionExitSymbol> &lt; </methodThrownExceptionExitSymbol>
+		<returnedValueSeparator> = </returnedValueSeparator>
+		<thrownExceptionSeparator> &gt;&gt; </thrownExceptionSeparator>
+
+		<elementsDelitmiter>, </elementsDelitmiter>
+		<mapKeyValueDelimeter> : </mapKeyValueDelimeter>
+		<arrayBeginsBracket>[</arrayBeginsBracket>
+		<arrayEndsBracket>]</arrayEndsBracket>
+		<iterableBeginsBracket>{</iterableBeginsBracket>
+		<iterableEndsBracket>}</iterableEndsBracket>
+		
+		<!-- replaces default toString value in case toString is undefied, useful to make log a bit more readable. 
+		pitfalls : If u need to distinct if objects with undefined toString are same do not define this value  -->
+		<undefindedToStringMethodSymbol>???</undefindedToStringMethodSymbol>
+		<!-- replaces the error message from log template, useful if you try to address vararg which is not always present    -->
+		<errorEvaluatingToStringSymbol>!!!</errorEvaluatingToStringSymbol>
+		<!-- if not specified null will be printed, useful when your application may write String with "null" value, this helps to distinct null string and null value  -->
+		<nullSymbol>NULL</nullSymbol>
+
+	</messageBuilderFactoryConfiguration>
+
+</aspect4logConfiguration>

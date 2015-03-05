@@ -1,8 +1,8 @@
- User Manual
+User Manual
 
 * Default behavior
 
-	When you place {{{http://aspect4log.sourceforge.net/apidocs/index.html}@Log}} annotation on a class, aspect4log will log execution of every method and constructor in it. 
+	When you place {{{./apidocs/index.html}@Log}} annotation on a class, aspect4log will log execution of every method and constructor in it. 
 	When you place @Log annotation on a method or constructor you override  all parameters of @Log annotation on this class. 
 	Default behavior is the following: 
 	
@@ -57,6 +57,11 @@ public List<Item> recursiveItemSearch(Item itemExample){
 }
 +---------------------------------------
 
+	In case use you want to use a {{{http://www.slf4j.org/apidocs/org/slf4j/Logger.html}Logger}} 
+	to add additional messages to the log with current indent level, instantiate logger via
+    {{{./apidocs/net/sf/aspect4log/slf4j/LoggerFactory.html}LoggerFactory}}.
+
+
 * Method enter and exit log levels
 	
 	There are cases when you want to switch a log level for a method/constructor enter/exit from the default DEBUG level.
@@ -107,7 +112,7 @@ public void pay(Customer customer, Order order, String cardNumber) throws Securi
 
 +---------------------------------------	
 @Log(on = {@Exceptions(exceptions = {RuntimeException.class}, stackTrace = true),
-           @Exceptions(exceptions = {PaymentException.class,SecurityException.class}, level=Level.WARN, stackTrace = false)})
+          @Exceptions(exceptions = {PaymentException.class,SecurityException.class}, level=Level.WARN, stackTrace = false)})
 public void pay(Customer customer, Order order, String cardNumber) throws SecurityException, PaymentException {
 ...
 }
@@ -126,12 +131,20 @@ public void pay(Customer customer, Order order, String cardNumber) throws Securi
    
     [] 
     
-    In order to control arguments and result log representation you may change Log.argumentsTemplate
-    Log.resultTemplate and Exceptions.template  default values. For each of those attributes the corresponding context variables are available.
-    ${args} is available for argumentsTemplate. It represents arguments array and allows access arguments by index. 
+    In order to control arguments and result log representation you may change @Log.argumentsTemplate
+    @Log.resultTemplate and @Exceptions.template  default values. 
+    For each of those attributes the corresponding context variables are available:
+    
+    *${args} is available at @Log.argumentsTemplate. It represents arguments array and allows access arguments by index. 
     E.g. ${args[0]},${args[2]} will print first and third arguments separated ','.
-    ${result.name} will print a value of the property 'name' of the resulting object.
-    ${exception.message} will print a value of property 'message' of a thrown exception.
+    
+    *${result} representing the returned value is available at @Log.resultTemplate.
+    E.g. ${result.name} will print a value of the property 'name' of the resulting object.
+    
+    *${exception} is available to @Exceptions.template.
+    E.g. ${exception.message} will print a value of property 'message' of a thrown exception.
+ 	
+ 	[]
  
 +---------------------------------------	     
 @Log(argumentsTemplate = "customerId=${args[0].id}", resultTemplate = "orderId=${result.id}")
@@ -158,43 +171,55 @@ public Order createOrder(Customer customer, String address, Item... items){
 	
 * Customizing Logging Decoration
 	
-	Log decorations are can be configured via aspect4log.xml  placed in root of your classpath.
+	Log decorations are can be configured via aspect4log.xml and aspect4log-test.xml  placed in root of a classpath.
+	If aspect4log-test.xml is found in classpath, it is used instead of aspect4log.xml. Usually you will place aspect4log-test.xml
+	in to maven src/test/resources folder, while aspect4log.xml is placed to src/main/resources.
+	
 	The parameters that may be changed are:
 	
 	*useIndent - defines if the indent logging is ON globally, the default value is true
 	
 	*indentText - defines the indent text, tab symbol is default value
 	
-	*methodEnterSymbol - defines the method enter symbol
+	*methodEnterSymbol - defines the method enter symbol, the default value is ↓
 	
-	*methodSuccessfulExitSymbol - defines the method successful exit symbol
+	*methodSuccessfulExitSymbol - defines the method successful exit symbol, the default value is ↑
 	
-	*methodThrownExceptionExitSymbol - defines the method thrown exception exit symbol
+	*methodThrownExceptionExitSymbol - defines the method thrown exception exit symbol, the default value is ↑
 	
-	*returnedValueSeparator - defines the returned value separator 
+	*returnedValueSeparator - defines the returned value separator, the default value is → 
 	
-	*thrownExceptionSeparator - defines the thrown exceptions separator
+	*thrownExceptionSeparator - defines the thrown exceptions separator, the default value is ⇒
 	
-	*elementsDelitmiter - defines the collection and array elements delimiter
+	*elementsDelitmiter - defines the collection and array elements delimiter, the default value is ,
 	
-	*mapKeyValueDelimiter - defines the map key value delimiter 
+	*mapKeyValueDelimiter - defines the map key value delimiter, the default value is =
 	
-	*arrayBeginsBracket - defines the array opening bracket
+	*arrayBeginsBracket - defines the array opening bracket, the default value is [
 	
-	*arrayEndsBracket - defines the array closing bracket 
+	*arrayEndsBracket - defines the array closing bracket , the default value is ]
 	
-	*iterableBeginsBracket - defines the iterable begins bracket
+	*iterableBeginsBracket - defines the iterable begins bracket, the default value is \{
 	
-	*iterableEndsBracket - defines the iterible ends bracket
+	*iterableEndsBracket - defines the iterable ends bracket, the default value is \}
 	
 	*undefindedToStringMethodSymbol - defines what to print in case toString() is undefined, the default value is not set, 
 	in this case the default toString() will value will be printed. Some peoples prefer to use "¿" symbol to have cleaner logs.
 	Note: there are cases when it is needed to use default toString(). 
 	When you need to see if two logged objects refer the same object it is better to leave undefindedToStringMethodSymbol undefined. 
 	
-	*errorEvaluatingToStringSymbol - defines a symbol indicating that an exception was thrown during toString() evaluation. The default value is "☣" (yes, it's a biohazard symbol, 
-	the symbol was suggested by a person who states that a runtime exception in toString() method is a sign of an error in the genetic code of a programmer). 
+	*errorEvaluatingToStringSymbol - defines a symbol indicating that an exception was thrown during toString() evaluation. The default value is a biohazard symbol "☣" 
+	(the symbol hints that a runtime exception in a toString() method may be a sign of an error in the genetic code of a programmer). 
 	
-	*nullSymbol - defines how to print null value. The default value is Ø.
+	*nullSymbol - defines how to print null value. The default value is not set, and the null will be printed as null. However many prefer to use Ø symbol.
 	
 	[]
+
+	Make sure that your logging framework uses UTF8, see how it is done with logback in our sample project in the quick start sections.
+
+	In case you want to alter default settings, download file {{{./samples/unicode/aspect4log.xml}aspect4log.xml}} , change required values and place it to your classpath.
+	
+	It is worth mentioning that some old operating system do not support UTF8 in console or even IDE (i.e. they don't have unicode fonts).
+	In this case it is recommend to use an alternative {{{./samples/non-unicode/aspect4log.xml}aspect4log.xml}} that do not use unicode symbols.
+
+	

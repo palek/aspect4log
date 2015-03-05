@@ -50,5 +50,4 @@ public class Order {
 		return "Order [id=" + id + ", customer=" + customer + ", address=" + address + ", items=" + Arrays.toString(items) + "]";
 	}
 	
-	
 }

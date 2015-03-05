@@ -1,0 +1,25 @@
+Question: Why do I see square symbols instead of arrow symbols?
+
+	There are 3 most frequent reasons for that:
+
+	*You forget to set UTF8 encoding in your logger framework (check quick start samples, to see how it can be done with logback),
+    
+    *Your operating system do not have UTF8 fonts.
+    
+    *In case you see logs in console, your console encoding is not UTF8.
+ 	 
+ 	[]
+ 
+ 
+Which classes are good candidates to place @Log annotation on to?
+	
+	Your spring beans or ejb session beans are the best candidates.
+
+
+Which AOP framework do you prefer for aspect4log integration?
+
+	We strongly recommend to use AspectJ because it allows you to do much more with less effort,
+however in case you work with sum outdated applicaton server like IBM WebSphere, that uses very old
+libs of aspectjrt, you might consider to use SpringAOP instead.  
+
+  

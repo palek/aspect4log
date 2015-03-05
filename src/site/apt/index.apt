@@ -1,8 +1,8 @@
 About
 
-    Aspect4log  solves the cross-cutting concern that every application has, i.e logging.
+    Aspect4log solves the cross-cutting concern that every application has, i.e logging.
 	It provides means to enable logging via {{{http://www.slf4j.org}slf4j}}
-	by annotating you classes and methods with {{{http://aspect4log.sourceforge.net/apidocs/index.html}@Log}}.
+	by annotating you classes and methods with {{{./apidocs/index.html}@Log}}.
 	These will allow you to log more with less code and above all your log will have a unified easy to read and analyze format.
 
 	By default the log output will looks  similar to :

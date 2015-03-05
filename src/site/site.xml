@@ -11,7 +11,7 @@
 	http://imgkid.com/logger-clipart.shtml http://www.shutterstock.com/s/skidder/search.html?page=1 
 	http://www.clipartof.com/portfolio/patrimonio/illustration/retro-worker-carrying-a-log-in-a-circle-of-sun-rays-1202048.html 
 	http://www.querydsl.com/ http://maven.apache.org/guides/mini/guide-site.html -->
-<project name="Aspect4Log - solving the cross-cutting concern all applications have!">
+<project name="Aspect4Log - one cross-cutting concern less to worry about!">
 	<skin>
 		<groupId>org.apache.maven.skins</groupId>
 		<artifactId>maven-fluido-skin</artifactId>
@@ -36,6 +36,7 @@
 			<topBarEnabled>false</topBarEnabled>
 			<sideBarEnabled>true</sideBarEnabled>
 			<googlePlusOne />
+			<facebookLike />
 		</fluidoSkin>
 	</custom>
 	<poweredBy>
@@ -65,6 +66,7 @@
 			<item name="Quick Start With SpringAOP" href="/quick-start-springaop.html" />
 			<item name="Usage" href="/usage.html" />
 			<!--<item name="FAQ" href="/faq.html" /> -->
+			<item name="JavaDocs" href="/apidocs/index.html"/>
 			<item name="Download" href="http://sourceforge.net/projects/aspect4log/files/" />
 		</menu>
 		<menu ref="reports" />
