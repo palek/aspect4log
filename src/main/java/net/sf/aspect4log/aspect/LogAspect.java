@@ -192,7 +192,7 @@ public class LogAspect {
 			}
 			break;
 		default:
-			throw new IllegalStateException("it seems that there was introduced new Log.Level which is not supported. Report a bug");
+			//NONE level do not print any log
 		}
 	}
 
