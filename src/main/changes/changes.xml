@@ -5,8 +5,13 @@
 		<author email="vitaliy.se@gmail.com">Vitaliy Semochkin</author>
 	</properties>
 	<body>
-		<release version="1.0.0" date="2014-04-01" description="Initial release">
+		<release version="1.0.6" date="2014-04-01" description="Initial release">
 			<action dev="yilativs" due-to-email="vitaliy.se@gmail.com" type="add">Migration to new Sonatype POM</action>
+		</release>
+		<release version="1.0.7" date="2015-03-06" description="BugFix release">
+			<action dev="yilativs" due-to-email="vitaliy.se@gmail.com" type="fix" issue="14" >Level.NONE was not fixed properly</action>
+			<action dev="yilativs" due-to-email="vitaliy.se@gmail.com" type="imp">Documentation improved</action>
+			<action dev="yilativs" due-to-email="vitaliy.se@gmail.com" type="imp">aspectj,slf4, commons-lang libs upgraded</action>
 		</release>
 	</body>
 </document>
