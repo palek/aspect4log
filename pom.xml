@@ -3,11 +3,10 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.sf.aspect4log</groupId>
 	<artifactId>aspect4log</artifactId>
-	<version>1.0.6</version>
+	<version>1.0.7</version>
 	<inceptionYear>2013</inceptionYear>
 	<name>${project.artifactId}</name>
-	<description>Aspect4log  solves the cross-cutting concern that every application has, i.e logging.
-	By providing an aspect to enable logging based on @Log annotation you can log more with less code.</description>
+	<description>Provides aspect for logging via slf4j by placing @Log annotation on classes and methods.</description>
 	<url>http://aspect4log.sf.net</url>
 	<organization>
 		<name>Yilativs</name>
@@ -75,7 +74,7 @@
 		<maven.compiler.source>1.6</maven.compiler.source>
 		<maven.compiler.target>1.6</maven.compiler.target>
 		<spring.version>4.0.4.RELEASE</spring.version>
-		<slf4j.version>1.7.6</slf4j.version>
+		<slf4j.version>1.7.10</slf4j.version>
 		<aspectj.version>1.8.5</aspectj.version>
 		<maven-pmd-plugin.configLocation>${project.basedir}/pmd.xml</maven-pmd-plugin.configLocation>
 	</properties>
@@ -153,12 +152,12 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
-			<version>3.2.1</version>
+			<version>3.3.2</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
-			<version>1.9.1</version>
+			<version>1.9.2</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>commons-logging</artifactId>
