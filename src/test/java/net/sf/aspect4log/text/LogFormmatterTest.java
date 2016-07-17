@@ -9,7 +9,7 @@ public class LogFormmatterTest {
 	public void isToStringOverriden() {
 		Assert.assertFalse(new LogFormatter().isToStringOverriden(new Object().getClass()));
 		Assert.assertFalse(new LogFormatter().isToStringOverriden(new Object[] { 1 }.getClass()));
-		Assert.assertTrue(new LogFormatter().isToStringOverriden(new String("s").getClass()));
+		Assert.assertTrue(new LogFormatter().isToStringOverriden("s".getClass()));
 		Assert.assertTrue(new LogFormatter().isToStringOverriden(new Integer(1).getClass()));
 	}
 	
